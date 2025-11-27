@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contribution & Expense Tracker</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background-color: #f2f2f2; }
+    input, select { margin: 5px; padding: 5px; }
+    .form-row { margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Contribution & Expense Tracker</h2>
+
+  <!-- Input Form -->
+  <div class="form-row">
+    <label>Person/Shop: <input type="text" id="person"></label>
+    <label>Type: 
+      <select id="type">
+        <option value="Contribution">Contribution</option>
+        <option value="Expense">Expense</option>
+      </select>
+    </label>
+    <label>Amount: <input type="number" id="amount"></label>
+    <button onclick="addEntry()">Add Entry</button>
+    <button onclick="clearData()">Clear All</button>
+  </div>
+
+  <!-- Table -->
+  <table id="tracker">
+    <thead>
+      <tr>
+        <th>Seq #</th>
+        <th>Date</th>
+        <th>Person/Shop</th>
+        <th>Type</th>
+        <th>Amount</th>
+        <th>Running Balance</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+
+  <script>
+    let balance = 0;
+    let seq = 0;
+    let entries = [];
+
+    // Load saved data on page load
+    window.onload = function() {
+      const saved = localStorage.getItem("trackerData");
+      if (saved) {
+        entries = JSON.parse(saved);
+        renderTable();
+      }
+    };
+
+    function addEntry() {
+      const person = document.getElementById("person").value;
+      const type = document.getElementById("type").value;
+      const amount = parseFloat(document.getElementById("amount").value);
+
+      if (!person || isNaN(amount)) {
+        alert("Please enter valid data.");
+        return;
+      }
+
+      seq = entries.length + 1;
+      const date = new Date().toLocaleDateString();
+      balance = (entries.length > 0 ? entries[entries.length - 1].balance : 0) 
+                + (type === "Contribution" ? amount : -amount);
+
+      const entry = {
+        seq: seq,
+        date: date,
+        person: person,
+        type: type,
+        amount: amount,
+        balance: balance
+      };
+
+      entries.push(entry);
+      localStorage.setItem("trackerData", JSON.stringify(entries));
+
+      renderTable();
+
+      // Clear inputs
+      document.getElementById("person").value = "";
+      document.getElementById("amount").value = "";
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById("tracker").getElementsByTagName("tbody")[0];
+      tbody.innerHTML = "";
+      entries.forEach(entry => {
+        const row = tbody.insertRow();
+        row.insertCell(0).innerText = entry.seq;
+        row.insertCell(1).innerText = entry.date;
+        row.insertCell(2).innerText = entry.person;
+        row.insertCell(3).innerText = entry.type;
+        row.insertCell(4).innerText = entry.amount.toFixed(2);
+        row.insertCell(5).innerText = entry.balance.toFixed(2);
+      });
+    }
+
+    function clearData() {
+      if (confirm("Clear all saved data?")) {
+        localStorage.removeItem("trackerData");
+        entries = [];
+        balance = 0;
+        seq = 0;
+        renderTable();
+      }
+    }
+  </script>
+</body>
+</html>
+
