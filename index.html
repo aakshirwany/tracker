@@ -2,38 +2,87 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Tracker from CSV</title>
+  <title>Contribution & Expense Tracker</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <style>
-    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-    th { background-color: #f2f2f2; }
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+    .table-container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    th {
+      background: #2c3e50;
+      color: #fff;
+      text-transform: uppercase;
+      font-size: 14px;
+      letter-spacing: 0.05em;
+    }
+    tr:nth-child(even) {
+      background: #f2f6fa;
+    }
+    tr:hover {
+      background: #eaf2f8;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #777;
+    }
   </style>
 </head>
 <body>
-  <h2>Contribution & Expense Tracker</h2>
-  <table id="tracker">
-    <thead>
-      <tr>
-        <th>Seq #</th>
-        <th>Date</th>
-        <th>Person/Shop</th>
-        <th>Type</th>
-        <th>Amount</th>
-        <th>Running Balance</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <h2>💰 Contribution & Expense Tracker</h2>
+  <div class="table-container">
+    <table id="tracker">
+      <thead>
+        <tr>
+          <th>Seq #</th>
+          <th>Date</th>
+          <th>Person/Shop</th>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>Running Balance</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <div class="footer">Data loaded from <code>data.csv</code></div>
 
   <script>
-    // Fetch CSV file from repo
     Papa.parse("data.csv", {
       download: true,
       header: true,
       complete: function(results) {
         const tbody = document.querySelector("#tracker tbody");
         results.data.forEach(row => {
+          if (!row.Seq) return; // skip empty rows
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${row.Seq}</td>
@@ -50,4 +99,8 @@
   </script>
 </body>
 </html>
+
+
+
+
 
