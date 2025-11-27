@@ -18,7 +18,7 @@
       margin-bottom: 20px;
     }
     .table-container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: auto;
       background: #fff;
       padding: 20px;
@@ -68,6 +68,7 @@
           <th>Type</th>
           <th>Amount</th>
           <th>Running Balance</th>
+          <th>Description</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -91,6 +92,7 @@
             <td>${row.Type}</td>
             <td>${row.Amount}</td>
             <td>${row.RunningBalance}</td>
+            <td>${row.Type === "Expense" ? row.Description || "" : ""}</td>
           `;
           tbody.appendChild(tr);
         });
@@ -99,8 +101,4 @@
   </script>
 </body>
 </html>
-
-
-
-
 
