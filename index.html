@@ -9,36 +9,43 @@
       font-family: system-ui, sans-serif;
       margin: 10px;
       background: #f9f9f9;
+      color: #333;
     }
     h2 {
       text-align: center;
       margin-bottom: 15px;
+      color: #444;
     }
     .table-container {
-      overflow-x: auto; /* allows horizontal scroll on small screens */
+      overflow-x: auto; /* horizontal scroll on small screens */
       -webkit-overflow-scrolling: touch;
       background: #fff;
       border-radius: 6px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 600px; /* ensures columns don’t squish too much */
+      min-width: 600px; /* prevents columns from squishing */
     }
     th, td {
-      padding: 10px;
+      padding: 12px;
       border-bottom: 1px solid #ddd;
       text-align: left;
       font-size: 14px;
-      white-space: nowrap; /* keeps columns consistent */
+      white-space: nowrap;
     }
     th {
-      background: #f0f0f0;
+      background: #007acc;
+      color: #fff;
       font-weight: bold;
     }
     tr:nth-child(even) {
-      background: #fafafa;
+      background: #f5faff;
+    }
+    tfoot td {
+      font-weight: bold;
+      background: #e6f2ff;
     }
   </style>
 </head>
@@ -58,6 +65,11 @@
         </tr>
       </thead>
       <tbody id="entries"></tbody>
+      <tfoot>
+        <tr>
+          <td colspan="7" id="summary">Summary will appear here</td>
+        </tr>
+      </tfoot>
     </table>
   </div>
 
@@ -71,17 +83,29 @@
         const data = rows.slice(1);
 
         const tbody = document.getElementById("entries");
+        const summaryCell = document.getElementById("summary");
         tbody.innerHTML = "";
+
+        let totalContrib = 0, totalExp = 0, balance = 0;
 
         data.forEach(row => {
           const tr = document.createElement("tr");
-          row.forEach(cell => {
+          row.forEach((cell, i) => {
             const td = document.createElement("td");
             td.textContent = cell;
             tr.appendChild(td);
           });
           tbody.appendChild(tr);
+
+          // Totals
+          const type = row[3].toLowerCase();
+          const amount = parseFloat(row[4]) || 0;
+          balance = parseFloat(row[5]) || balance;
+          if (type === "contribution") totalContrib += amount;
+          if (type === "expense") totalExp += amount;
         });
+
+        summaryCell.textContent = `Total Contributions: ${totalContrib} | Total Expenses: ${totalExp} | Current Balance: ${balance}`;
       } catch (err) {
         console.error("Failed to load entries:", err);
       }
