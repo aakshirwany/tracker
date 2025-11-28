@@ -1,18 +1,28 @@
-i<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tracker</title>
   <style>
-    body { font-family: system-ui, sans-serif; margin: 10px; }
-    .table-container { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 8px; border-bottom: 1px solid #ddd; }
-    button, input, select { font-size: 16px; padding: 10px; width: 100%; margin: 5px 0; }
+    body { font-family: system-ui, sans-serif; margin: 10px; background: #f9f9f9; }
+    h2 { text-align: center; }
+    .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; background: #fff; }
+    th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; font-size: 14px; }
+    th { background: #f0f0f0; }
+    /* Mobile card view */
     @media (max-width: 600px) {
       table { display: none; }
-      .entry-card { border: 1px solid #ccc; margin: 8px 0; padding: 10px; border-radius: 6px; }
+      .entry-card {
+        border: 1px solid #ccc;
+        margin: 8px 0;
+        padding: 10px;
+        border-radius: 6px;
+        background: #fff;
+      }
+      .entry-card div { margin: 4px 0; }
+      .label { font-weight: bold; }
     }
   </style>
 </head>
@@ -21,129 +31,60 @@ i<!DOCTYPE html>
   <div class="table-container">
     <table>
       <thead>
-        <tr><th>Seq</th><th>Date</th><th>Person/Shop</th><th>Type</th><th>Amount</th><th>Balance</th><th>Description</th></tr>
+        <tr>
+          <th>Seq</th><th>Date</th><th>Person/Shop</th>
+          <th>Type</th><th>Amount</th><th>Balance</th><th>Description</th>
+        </tr>
       </thead>
       <tbody id="entries"></tbody>
     </table>
   </div>
 
-  <h3>Add Entry</h3>
-  <select id="entryType">
-    <option value="Contribution">Contribution</option>
-    <option value="Expense">Expense</option>
-  </select>
-  <input id="person" placeholder="Contributor/Shop">
-  <input id="amount" type="number" placeholder="Amount">
-  <input id="description" placeholder="Description (for Expense)">
-  <button onclick="addEntry()">Add Entry</button>
-</body>
-</html>
-
-
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Contribution & Expense Tracker</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-  <style>
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: #f9fafb;
-      margin: 0;
-      padding: 20px;
-      color: #333;
-    }
-    h2 {
-      text-align: center;
-      color: #2c3e50;
-      margin-bottom: 20px;
-    }
-    .table-container {
-      max-width: 1000px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    th, td {
-      padding: 12px;
-      text-align: center;
-      border-bottom: 1px solid #e0e0e0;
-    }
-    th {
-      background: #2c3e50;
-      color: #fff;
-      text-transform: uppercase;
-      font-size: 14px;
-      letter-spacing: 0.05em;
-    }
-    tr:nth-child(even) {
-      background: #f2f6fa;
-    }
-    tr:hover {
-      background: #eaf2f8;
-    }
-    .footer {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 13px;
-      color: #777;
-    }
-  </style>
-</head>
-<body>
-  <h2>💰 Contribution & Expense Tracker</h2>
-  <div class="table-container">
-    <table id="tracker">
-      <thead>
-        <tr>
-          <th>Seq #</th>
-          <th>Date</th>
-          <th>Person/Shop</th>
-          <th>Type</th>
-          <th>Amount</th>
-          <th>Running Balance</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-  <div class="footer">Data loaded from <code>data.csv</code></div>
+  <!-- Mobile card container -->
+  <div id="cards"></div>
 
   <script>
-    Papa.parse("data.csv", {
-      download: true,
-      header: true,
-      complete: function(results) {
-        const tbody = document.querySelector("#tracker tbody");
-        results.data.forEach(row => {
-          if (!row.Seq) return; // skip empty rows
+    // Example: load data from data.csv via fetch if hosted
+    async function loadEntries() {
+      try {
+        const response = await fetch("data.csv");
+        const text = await response.text();
+        const rows = text.trim().split("\n").map(r => r.split(","));
+        const headers = rows[0];
+        const data = rows.slice(1);
+
+        const tbody = document.getElementById("entries");
+        const cards = document.getElementById("cards");
+        tbody.innerHTML = "";
+        cards.innerHTML = "";
+
+        data.forEach(row => {
+          // Table row
           const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${row.Seq}</td>
-            <td>${row.Date}</td>
-            <td>${row.Person}</td>
-            <td>${row.Type}</td>
-            <td>${row.Amount}</td>
-            <td>${row.RunningBalance}</td>
-            <td>${row.Type === "Expense" ? row.Description || "" : ""}</td>
-          `;
+          row.forEach(cell => {
+            const td = document.createElement("td");
+            td.textContent = cell;
+            tr.appendChild(td);
+          });
           tbody.appendChild(tr);
+
+          // Mobile card
+          const card = document.createElement("div");
+          card.className = "entry-card";
+          headers.forEach((h, i) => {
+            const div = document.createElement("div");
+            div.innerHTML = `<span class="label">${h}:</span> ${row[i]}`;
+            card.appendChild(div);
+          });
+          cards.appendChild(card);
         });
+      } catch (err) {
+        console.error("Failed to load entries:", err);
       }
-    });
+    }
+    loadEntries();
   </script>
 </body>
 </html>
+
 
