@@ -1,6 +1,6 @@
 Seq,Date,Person,Type,Amount,RunningBalance,Description
-1,25-Nov-26,Arshad,Contribution,500,500
-2,26-Nov-26,Amin,Contribution,500,1000
-3,27-Nov-27,Akbar,Contribution,500,1500
-4,27-Nov-26,K2,Contribution,500,2000
-5,28-Nov-26,Kiwi,Expense,50,1950, Snacks
+1,25-Nov-26,Arshad,Contribution,500,500.0,
+2,26-Nov-26,Amin,Contribution,500,1000.0,
+3,27-Nov-27,Akbar,Contribution,500,1500.0,
+4,27-Nov-26,K2,Contribution,500,2000.0,
+5,28-Nov-25,Kiwi,Expense,30.5,1969.5,Milk
