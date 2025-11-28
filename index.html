@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tracker</title>
+  <title>Expense Tracker</title>
   <style>
     body {
       font-family: system-ui, sans-serif;
@@ -17,7 +17,7 @@
       color: #444;
     }
     .table-container {
-      overflow-x: auto; /* horizontal scroll on small screens */
+      overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       background: #fff;
       border-radius: 6px;
@@ -26,7 +26,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 600px; /* prevents columns from squishing */
+      min-width: 600px;
     }
     th, td {
       padding: 12px;
@@ -46,11 +46,12 @@
     tfoot td {
       font-weight: bold;
       background: #e6f2ff;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <h2>Contribution & Expense Tracker</h2>
+  <h2>Expense Tracker</h2>
   <div class="table-container">
     <table>
       <thead>
@@ -67,7 +68,10 @@
       <tbody id="entries"></tbody>
       <tfoot>
         <tr>
-          <td colspan="7" id="summary">Summary will appear here</td>
+          <td colspan="7" id="summary-line1"></td>
+        </tr>
+        <tr>
+          <td colspan="7" id="summary-line2"></td>
         </tr>
       </tfoot>
     </table>
@@ -83,14 +87,15 @@
         const data = rows.slice(1);
 
         const tbody = document.getElementById("entries");
-        const summaryCell = document.getElementById("summary");
+        const summaryLine1 = document.getElementById("summary-line1");
+        const summaryLine2 = document.getElementById("summary-line2");
         tbody.innerHTML = "";
 
         let totalContrib = 0, totalExp = 0, balance = 0;
 
         data.forEach(row => {
           const tr = document.createElement("tr");
-          row.forEach((cell, i) => {
+          row.forEach(cell => {
             const td = document.createElement("td");
             td.textContent = cell;
             tr.appendChild(td);
@@ -105,7 +110,8 @@
           if (type === "expense") totalExp += amount;
         });
 
-        summaryCell.textContent = `Total Contributions: ${totalContrib} | Total Expenses: ${totalExp} | Current Balance: ${balance}`;
+        summaryLine1.textContent = `Total Contributions: ${totalContrib} | Total Expenses: ${totalExp}`;
+        summaryLine2.textContent = `Current Balance: ${balance}`;
       } catch (err) {
         console.error("Failed to load entries:", err);
       }
@@ -114,4 +120,5 @@
   </script>
 </body>
 </html>
+
 
