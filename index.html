@@ -48,7 +48,7 @@
       background: #e6f2ff;
       text-align: left;
       font-size: 12px; /* ✅ smaller font for summary */
-      padding: 6px;    /* tighter spacing */
+      padding: 6px;
     }
   </style>
 </head>
@@ -69,12 +69,9 @@
       </thead>
       <tbody id="entries"></tbody>
       <tfoot>
-        <tr>
-          <td colspan="7" id="summary-line1"></td>
-        </tr>
-        <tr>
-          <td colspan="7" id="summary-line2"></td>
-        </tr>
+        <tr><td colspan="7" id="summary-line1"></td></tr>
+        <tr><td colspan="7" id="summary-line2"></td></tr>
+        <tr><td colspan="7" id="summary-line3"></td></tr>
       </tfoot>
     </table>
   </div>
@@ -91,6 +88,7 @@
         const tbody = document.getElementById("entries");
         const summaryLine1 = document.getElementById("summary-line1");
         const summaryLine2 = document.getElementById("summary-line2");
+        const summaryLine3 = document.getElementById("summary-line3");
         tbody.innerHTML = "";
 
         let totalContrib = 0, totalExp = 0, balance = 0;
@@ -112,8 +110,9 @@
           if (type === "expense") totalExp += amount;
         });
 
-        summaryLine1.textContent = `Total Contributions: ${totalContrib} | Total Expenses: ${totalExp}`;
-        summaryLine2.textContent = `Current Balance: ${balance}`;
+        summaryLine1.textContent = `Total Contributions: ${totalContrib}`;
+        summaryLine2.textContent = `Total Expenses: ${totalExp}`;
+        summaryLine3.textContent = `Current Balance: ${balance}`;
       } catch (err) {
         console.error("Failed to load entries:", err);
       }
