@@ -4,3 +4,4 @@ Seq,Date,Person,Type,Amount,RunningBalance,Description
 3,27-Nov-27,Akbar,Contribution,500,1500.0,
 4,27-Nov-26,K2,Contribution,500,2000.0,
 5,28-Nov-25,Kiwi,Expense,30.5,1969.5,Milk
+6,28-Nov-25,Kiwi,Expense,50.0,1919.5,Snacks
