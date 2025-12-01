@@ -33,7 +33,7 @@
       border-bottom: 1px solid #ddd;
       text-align: left;
       font-size: 14px;
-      white-space: nowrap;
+      white-space: nowrap; /* keep most columns on one line */
     }
     th {
       background: #007acc;
@@ -47,8 +47,14 @@
       font-weight: bold;
       background: #e6f2ff;
       text-align: left;
-      font-size: 12px; /* ✅ smaller font for summary */
+      font-size: 12px; /* smaller font for summary */
       padding: 6px;
+    }
+    /* ✅ Allow wrapping only in Description column */
+    td.description {
+      white-space: normal;
+      word-wrap: break-word;
+      max-width: 250px; /* adjust width as needed */
     }
   </style>
 </head>
@@ -95,9 +101,12 @@
 
         data.forEach(row => {
           const tr = document.createElement("tr");
-          row.forEach(cell => {
+          row.forEach((cell, idx) => {
             const td = document.createElement("td");
             td.textContent = cell;
+            if (idx === 6) { // ✅ Description column
+              td.classList.add("description");
+            }
             tr.appendChild(td);
           });
           tbody.appendChild(tr);
@@ -121,4 +130,5 @@
   </script>
 </body>
 </html>
+
 
