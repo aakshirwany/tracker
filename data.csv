@@ -3,3 +3,4 @@ Seq,Date,Person,Type,Amount,RunningBalance,Description
 2,26-Nov-26,Amin,Contribution,500,1000.0,
 3,27-Nov-27,Akbar,Contribution,500,1500.0,
 4,27-Nov-26,Azeem,Contribution,500,2000.0,
+5,01-Dec-25,Rema 1000 Vøyenenga,Expense,70.0,1930.0,"Kokostopper 49,90 + Klementiner 20,34"
