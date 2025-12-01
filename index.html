@@ -86,13 +86,13 @@
     async function loadEntries() {
       try {
         const response = await fetch("data.csv");
-        const text = await response.text();
+        let text = await response.text();
 
-        // Parse CSV safely: split by commas, strip quotes, normalize decimals
+        // ✅ Fix decimal commas before splitting (e.g., 49,90 → 49.90)
+        text = text.replace(/(\d),(\d{2})/g, "$1.$2");
+
         const rows = text.trim().split("\n").map(r =>
-          r.split(",").map(cell =>
-            cell.replace(/^"|"$/g, "").replace(",", ".")
-          )
+          r.split(",").map(cell => cell.replace(/^"|"$/g, ""))
         );
 
         const headers = rows[0];
@@ -115,7 +115,6 @@
             if (idx === 4 || idx === 5) {
               const num = parseFloat(cell);
               if (!isNaN(num)) {
-                // Show integers without decimals, keep decimals if needed
                 td.textContent = Number.isInteger(num) ? num : num.toFixed(2);
               } else {
                 td.textContent = cell;
@@ -148,5 +147,4 @@
   </script>
 </body>
 </html>
-
 
