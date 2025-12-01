@@ -83,51 +83,63 @@
   </div>
 
   <script>
-    async function loadEntries() {
-      try {
-        const response = await fetch("data.csv"); // assumes data.csv is hosted alongside
-        const text = await response.text();
-        const rows = text.trim().split("\n").map(r => r.split(","));
-        const headers = rows[0];
-        const data = rows.slice(1);
+  async function loadEntries() {
+    try {
+      const response = await fetch("data.csv");
+      const text = await response.text();
 
-        const tbody = document.getElementById("entries");
-        const summaryLine1 = document.getElementById("summary-line1");
-        const summaryLine2 = document.getElementById("summary-line2");
-        const summaryLine3 = document.getElementById("summary-line3");
-        tbody.innerHTML = "";
+      // Use a real CSV parser instead of split(",")
+      const rows = text.trim().split("\n").map(r => {
+        // Remove surrounding quotes and normalize decimal separator
+        return r.split(",").map(cell => cell.replace(/^"|"$/g, "").replace(",", "."));
+      });
 
-        let totalContrib = 0, totalExp = 0, balance = 0;
+      const headers = rows[0];
+      const data = rows.slice(1);
 
-        data.forEach(row => {
-          const tr = document.createElement("tr");
-          row.forEach((cell, idx) => {
-            const td = document.createElement("td");
+      const tbody = document.getElementById("entries");
+      const summaryLine1 = document.getElementById("summary-line1");
+      const summaryLine2 = document.getElementById("summary-line2");
+      const summaryLine3 = document.getElementById("summary-line3");
+      tbody.innerHTML = "";
+
+      let totalContrib = 0, totalExp = 0, balance = 0;
+
+      data.forEach(row => {
+        const tr = document.createElement("tr");
+        row.forEach((cell, idx) => {
+          const td = document.createElement("td");
+
+          // Format numbers cleanly
+          if (idx === 4 || idx === 5) { // Amount or Balance columns
+            const num = parseFloat(cell);
+            td.textContent = isNaN(num) ? cell : num.toString(); // no decimals if integer
+          } else {
             td.textContent = cell;
-            if (idx === 6) { // ✅ Description column
-              td.classList.add("description");
-            }
-            tr.appendChild(td);
-          });
-          tbody.appendChild(tr);
+          }
 
-          // Totals
-          const type = row[3].toLowerCase();
-          const amount = parseFloat(row[4]) || 0;
-          balance = parseFloat(row[5]) || balance;
-          if (type === "contribution") totalContrib += amount;
-          if (type === "expense") totalExp += amount;
+          if (idx === 6) td.classList.add("description"); // wrap description
+          tr.appendChild(td);
         });
+        tbody.appendChild(tr);
 
-        summaryLine1.textContent = `Total Contributions: ${totalContrib}`;
-        summaryLine2.textContent = `Total Expenses: ${totalExp}`;
-        summaryLine3.textContent = `Current Balance: ${balance}`;
-      } catch (err) {
-        console.error("Failed to load entries:", err);
-      }
+        // Totals
+        const type = row[3].toLowerCase();
+        const amount = parseFloat(row[4]) || 0;
+        balance = parseFloat(row[5]) || balance;
+        if (type === "contribution") totalContrib += amount;
+        if (type === "expense") totalExp += amount;
+      });
+
+      summaryLine1.textContent = `Total Contributions: ${totalContrib}`;
+      summaryLine2.textContent = `Total Expenses: ${totalExp}`;
+      summaryLine3.textContent = `Current Balance: ${balance}`;
+    } catch (err) {
+      console.error("Failed to load entries:", err);
     }
-    loadEntries();
-  </script>
+  }
+  loadEntries();
+</script>
 </body>
 </html>
 
