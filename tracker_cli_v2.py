@@ -1,8 +1,13 @@
 import csv
 import datetime
 import subprocess
+import textwrap
 
 CSV_FILE = "data.csv"
+
+def wrap_text(text, width=25):
+    """Wrap text into lines of max `width` characters."""
+    return textwrap.wrap(text, width=width) if text else [""]
 
 def load_entries():
     try:
@@ -19,7 +24,12 @@ def display_entries(entries):
         return
     print(f"{'Seq':<5}{'Date':<12}{'Person/Shop':<20}{'Type':<15}{'Amount':<10}{'Balance':<12}{'Description'}")
     for e in entries:
-        print(f"{e['Seq']:<5}{e['Date']:<12}{e['Person']:<20}{e['Type']:<15}{e['Amount']:<10}{e['RunningBalance']:<12}{e['Description']}")
+        wrapped_desc = wrap_text(e['Description'])
+        # First line with all fields
+        print(f"{e['Seq']:<5}{e['Date']:<12}{e['Person']:<20}{e['Type']:<15}{e['Amount']:<10}{e['RunningBalance']:<12}{wrapped_desc[0]}")
+        # Subsequent lines: only description column
+        for line in wrapped_desc[1:]:
+            print(f"{'':<5}{'':<12}{'':<20}{'':<15}{'':<10}{'':<12}{line}")
     # Summary line
     total_contrib = sum(float(e["Amount"]) for e in entries if e["Type"].lower() == "contribution")
     total_exp = sum(float(e["Amount"]) for e in entries if e["Type"].lower() == "expense")
@@ -104,7 +114,11 @@ def add_entry(entries):
 
     # Show preview before committing
     print("\nPreview of new entry:")
-    print(f"{new_entry['Seq']:<5}{new_entry['Date']:<12}{new_entry['Person']:<20}{new_entry['Type']:<15}{new_entry['Amount']:<10}{new_entry['RunningBalance']:<12}{new_entry['Description']}")
+    wrapped_desc = wrap_text(new_entry['Description'])
+    print(f"{new_entry['Seq']:<5}{new_entry['Date']:<12}{new_entry['Person']:<20}{new_entry['Type']:<15}{new_entry['Amount']:<10}{new_entry['RunningBalance']:<12}{wrapped_desc[0]}")
+    for line in wrapped_desc[1:]:
+        print(f"{'':<5}{'':<12}{'':<20}{'':<15}{'':<10}{'':<12}{line}")
+
     confirm = input("Do you want to add this entry? (Y/N): ").strip().lower()
     if confirm != "y":
         print("❌ Entry addition cancelled.")
