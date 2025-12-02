@@ -26,14 +26,21 @@ def display_entries(entries):
     balance = float(entries[-1]["RunningBalance"]) if entries else 0
     print(f"\nSummary → Contributions: {total_contrib}, Expenses: {total_exp}, Current Balance: {balance}")
 
-def save_entries(entries):
-    confirm = input("Are you sure you want to save changes? (Y/N): ").strip().lower()
-    if confirm != "y":
-        print("❌ Save cancelled.")
-        return
+def save_entries(entries, silent=False):
+    """Save entries to CSV. If silent=True, skip confirmation prompt."""
+    if not silent:
+        confirm = input("Are you sure you want to save changes? (Y/N): ").strip().lower()
+        if confirm != "y":
+            print("❌ Save cancelled.")
+            return
     fieldnames = ["Seq","Date","Person","Type","Amount","RunningBalance","Description"]
     with open(CSV_FILE, "w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(
+            f,
+            fieldnames=fieldnames,
+            quoting=csv.QUOTE_NONE,   # ✅ no quotes around description
+            escapechar="\\"
+        )
         writer.writeheader()
         writer.writerows(entries)
     print("✅ Data saved to data.csv")
@@ -43,7 +50,8 @@ def push_to_github(entries):
     if confirm != "y":
         print("❌ Push cancelled.")
         return
-    save_entries(entries)  # ensure latest entries are saved before push
+    # ✅ Always save automatically before pushing (no prompt)
+    save_entries(entries, silent=True)
     try:
         subprocess.run(["git", "add", CSV_FILE], check=True)
         subprocess.run(["git", "commit", "-m", "Update tracker data"], check=True)
@@ -51,6 +59,10 @@ def push_to_github(entries):
         print("✅ Changes pushed to GitHub")
     except subprocess.CalledProcessError as e:
         print(f"❌ Git command failed: {e}")
+
+def sanitize_description(text: str) -> str:
+    """Replace commas with ' - ' (space-dash-space)."""
+    return text.replace(",", " - ").strip()
 
 def add_entry(entries):
     print("Select Entry Type:")
@@ -82,7 +94,7 @@ def add_entry(entries):
         except ValueError:
             print("❌ Amount must be a number")
             return entries
-        description = input("Description: ").strip()
+        description = sanitize_description(input("Description: "))
     else:
         print("❌ Invalid choice")
         return entries
@@ -124,7 +136,7 @@ def remove_entry(entries):
     if len(new_entries) == len(entries):
         print("❌ No entry found with that Seq #")
     else:
-        # Recalculate sequence numbers and balances
+        # ✅ Properly indented block
         balance = 0
         for i, e in enumerate(new_entries, start=1):
             e["Seq"] = str(i)
