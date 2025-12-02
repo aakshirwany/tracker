@@ -47,7 +47,7 @@
       font-weight: bold;
       background: #e6f2ff;
       text-align: left;
-      font-size: 12px;
+      font-size: 12px; /* smaller font for summary */
       padding: 6px;
     }
     /* ✅ Allow wrapping only in Description column */
@@ -85,16 +85,9 @@
   <script>
     async function loadEntries() {
       try {
-        const response = await fetch("data.csv");
-        let text = await response.text();
-
-        // ✅ Fix decimal commas before splitting (e.g., 49,90 → 49.90)
-        text = text.replace(/(\d),(\d{2})/g, "$1.$2");
-
-        const rows = text.trim().split("\n").map(r =>
-          r.split(",").map(cell => cell.replace(/^"|"$/g, ""))
-        );
-
+        const response = await fetch("data.csv"); // assumes data.csv is hosted alongside
+        const text = await response.text();
+        const rows = text.trim().split("\n").map(r => r.split(","));
         const headers = rows[0];
         const data = rows.slice(1);
 
@@ -110,20 +103,10 @@
           const tr = document.createElement("tr");
           row.forEach((cell, idx) => {
             const td = document.createElement("td");
-
-            // Format Amount and Balance columns cleanly
-            if (idx === 4 || idx === 5) {
-              const num = parseFloat(cell);
-              if (!isNaN(num)) {
-                td.textContent = Number.isInteger(num) ? num : num.toFixed(2);
-              } else {
-                td.textContent = cell;
-              }
-            } else {
-              td.textContent = cell;
+            td.textContent = cell;
+            if (idx === 6) { // ✅ Description column
+              td.classList.add("description");
             }
-
-            if (idx === 6) td.classList.add("description"); // wrap description
             tr.appendChild(td);
           });
           tbody.appendChild(tr);
