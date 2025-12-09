@@ -6,3 +6,5 @@ Seq,Date,Person,Type,Amount,RunningBalance,Description
 5,01-Dec-25,Rema 1000 Vøyenenga,Expense,70.0,1930.0,1 Boks av Kokostopper - 12 stk Klementiner
 6,04-Dec-25,Kiwi Kjørbokollen,Expense,45.0,1885.0,Klementiner - Dadler
 7,07-Dec-25,Rema 1000 Vøyenenga,Expense,18.0,1867.0,Klementiner
+8,08-Dec-25,Europris,Expense,50.0,1817.0,Pappbegger 50-pk
+9,08-Dec-25,Kiwi Kjørbokollen,Expense,40.0,1777.0,Klementiner - Dadler
