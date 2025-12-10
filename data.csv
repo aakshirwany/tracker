@@ -8,3 +8,5 @@ Seq,Date,Person,Type,Amount,RunningBalance,Description
 7,07-Dec-25,Rema 1000 Vøyenenga,Expense,18.0,1867.0,Klementiner
 8,08-Dec-25,Europris,Expense,50.0,1817.0,Pappbegger 50-pk
 9,08-Dec-25,Kiwi Kjørbokollen,Expense,40.0,1777.0,Klementiner - Dadler
+10,09-Dec-25,Kiwi Kjørbokollen,Expense,29.0,1748.0,Klementiner
+11,10-Dec-25,Abdul Qayyum,Contribution,500.0,2248.0,
