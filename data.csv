@@ -11,3 +11,5 @@ Seq,Date,Person,Type,Amount,RunningBalance,Description
 10,09-Dec-25,Kiwi Kjørbokollen,Expense,29.0,1748.0,Klementiner
 11,10-Dec-25,Abdul Qayyum,Contribution,500.0,2248.0,
 12,10-Dec-25,Kiwi Kjørbokollen,Expense,46.0,2202.0,Melk - Klementiner
+13,13-Dec-25,Kiwi Kjørbokollen,Expense,28.0,2174.0,Klementiner
+14,14-Dec-25,Asian Shop Sandvika,Expense,22.0,2152.0,Dadler
