@@ -17,7 +17,7 @@
       color: #444;
     }
 
-    /* Premium Metric Cards Container */
+    /* ✅ Premium Metric Cards Container */
     .summary-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -25,7 +25,7 @@
       margin-bottom: 25px;
     }
 
-    /* Individual Card Styles */
+    /* ✅ Individual Card Styles */
     .card {
       background: #fff;
       padding: 15px;
@@ -82,25 +82,11 @@
       font-size: 14px;
       white-space: nowrap;
     }
-
-    /* Sortable Headers */
     th {
       background: #007acc;
       color: #fff;
       font-weight: bold;
-      cursor: pointer;
-      user-select: none;
-      position: relative;
-      transition: background 0.2s;
     }
-    th:hover {
-      background: #005a99;
-    }
-    .sort-icon {
-      margin-left: 5px;
-      font-size: 12px;
-    }
-
     tr:nth-child(even) {
       background: #f5faff;
     }
@@ -140,12 +126,12 @@
     <table>
       <thead>
         <tr>
-          <th onclick="sortTable(0, 'number')">Seq <span id="sort-icon-0" class="sort-icon"></span></th>
-          <th onclick="sortTable(1, 'date')">Date <span id="sort-icon-1" class="sort-icon"></span></th>
-          <th onclick="sortTable(2, 'string')">Person/Shop <span id="sort-icon-2" class="sort-icon"></span></th>
-          <th onclick="sortTable(3, 'string')">Type <span id="sort-icon-3" class="sort-icon"></span></th>
-          <th onclick="sortTable(4, 'number')">Amount <span id="sort-icon-4" class="sort-icon"></span></th>
-          <th onclick="sortTable(5, 'number')">Balance <span id="sort-icon-5" class="sort-icon"></span></th>
+          <th>Seq</th>
+          <th>Date</th>
+          <th>Person/Shop</th>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>Balance</th>
           <th>Description</th>
         </tr>
       </thead>
@@ -159,50 +145,45 @@
   </div>
 
   <script>
-    let globalEntries = [];
-    let currentSortColumn = -1;
-    let currentSortAscending = true;
-
-    // Helper: Parse DD-Mon-YY string (e.g., "15-Jul-26") to a Date object
-    function parseDate(dateStr) {
-      if (!dateStr) return new Date(0);
-      const parts = dateStr.split('-');
-      if (parts.length !== 3) return new Date(0);
-
-      const day = parseInt(parts[0], 10);
-      const months = {
-        jan:0, feb:1, mar:2, apr:3, may:4, jun:5,
-        jul:6, aug:7, sep:8, oct:9, nov:10, dec:11
-      };
-      const month = months[parts[1].toLowerCase()] || 0;
-
-      // Assume 2000s for YY
-      let year = parseInt(parts[2], 10);
-      if (year < 100) year += 2000;
-
-      return new Date(year, month, day);
-    }
-
     async function loadEntries() {
       try {
         const response = await fetch("data.csv");
         const text = await response.text();
         const rows = text.trim().split("\n").map(r => r.split(","));
+        const headers = rows[0];
         const data = rows.slice(1);
 
+        const tbody = document.getElementById("entries");
+        const topContrib = document.getElementById("top-contrib");
+        const topExp = document.getElementById("top-exp");
+        const topBalance = document.getElementById("top-balance");
+
+        const summaryLine1 = document.getElementById("summary-line1");
+        const summaryLine2 = document.getElementById("summary-line2");
+        const summaryLine3 = document.getElementById("summary-line3");
+        tbody.innerHTML = "";
+
         let totalContrib = 0, totalExp = 0, balance = 0;
-        globalEntries = [];
 
         data.forEach(row => {
           if (!row || row.length < 6) return;
+
+          const tr = document.createElement("tr");
+          row.forEach((cell, idx) => {
+            const td = document.createElement("td");
+            td.textContent = cell;
+            if (idx === 6) {
+              td.classList.add("description");
+            }
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
 
           const type = row[3].toLowerCase();
           const amount = parseFloat(row[4]) || 0;
           balance = parseFloat(row[5]) || balance;
           if (type === "contribution") totalContrib += amount;
           if (type === "expense") totalExp += amount;
-
-          globalEntries.push(row);
         });
 
         // Set top dashboard card values
@@ -214,86 +195,12 @@
         summaryLine1.textContent = `Total Contributions: ${totalContrib}`;
         summaryLine2.textContent = `Total Expenses: ${totalExp}`;
         summaryLine3.textContent = `Current Balance: ${balance}`;
-
-        // Reverse the items initially to show the newest entries on top (assuming default is chronologically ascending)
-        globalEntries.reverse();
-
-        renderTable(globalEntries);
       } catch (err) {
         console.error("Failed to load entries:", err);
       }
     }
-
-    function renderTable(entries) {
-      const tbody = document.getElementById("entries");
-      tbody.innerHTML = "";
-
-      entries.forEach(row => {
-        const tr = document.createElement("tr");
-        row.forEach((cell, idx) => {
-          const td = document.createElement("td");
-          td.textContent = cell;
-          if (idx === 6) {
-            td.classList.add("description");
-          }
-          tr.appendChild(td);
-        });
-        tbody.appendChild(tr);
-      });
-    }
-
-    function sortTable(colIndex, type) {
-      // Toggle sort directions
-      if (currentSortColumn === colIndex) {
-        currentSortAscending = !currentSortAscending;
-      } else {
-        currentSortColumn = colIndex;
-        currentSortAscending = true;
-      }
-
-      // Perform sort logic
-      globalEntries.sort((a, b) => {
-        let valA = a[colIndex] ? a[colIndex].trim() : '';
-        let valB = b[colIndex] ? b[colIndex].trim() : '';
-
-        if (type === 'number') {
-          return currentSortAscending
-            ? (parseFloat(valA) || 0) - (parseFloat(valB) || 0)
-            : (parseFloat(valB) || 0) - (parseFloat(valA) || 0);
-        } else if (type === 'date') {
-          const dateA = parseDate(valA);
-          const dateB = parseDate(valB);
-          return currentSortAscending ? dateA - dateB : dateB - dateA;
-        } else { // String sort
-          return currentSortAscending
-            ? valA.localeCompare(valB)
-            : valB.localeCompare(valA);
-        }
-      });
-
-      // Update Header Icons
-      for (let i = 0; i <= 5; i++) {
-        const iconSpan = document.getElementById(`sort-icon-${i}`);
-        if (i === colIndex) {
-          iconSpan.textContent = currentSortAscending ? "▲" : "▼";
-        } else {
-          iconSpan.textContent = "";
-        }
-      }
-
-      renderTable(globalEntries);
-    }
-
-    const topContrib = document.getElementById("top-contrib");
-    const topExp = document.getElementById("top-exp");
-    const topBalance = document.getElementById("top-balance");
-    const summaryLine1 = document.getElementById("summary-line1");
-    const summaryLine2 = document.getElementById("summary-line2");
-    const summaryLine3 = document.getElementById("summary-line3");
-
     loadEntries();
   </script>
 </body>
 </html>
-
 
