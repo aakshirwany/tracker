@@ -14,27 +14,16 @@ def load_entries():
         return []
 
 def display_entries(entries):
-    # Calculate summary statistics first to use them at the top
-    total_contrib = sum(float(e["Amount"]) for e in entries if e["Type"].lower() == "contribution")
-    total_exp = sum(float(e["Amount"]) for e in entries if e["Type"].lower() == "expense")
-    balance = float(entries[-1]["RunningBalance"]) if entries else 0
-
     print("\n=== Current Entries ===")
-
-    # Summary Line on Top
-    if entries:
-        print(f"Summary → Contributions: {total_contrib}, Expenses: {total_exp}, Current Balance: {balance}")
-        print("-" * 80)
-
     if not entries:
         print("No entries yet.")
         return
-
-    print(f"{'Seq':<5}{'Date':<12}{'Person/Shop':<20}{'Type':<15}{'Amount':<10}{'RunningBalance':<16}{'Description'}")
+    print(f"{'Seq':<5}{'Date':<12}{'Person/Shop':<20}{'Type':<15}{'Amount':<10}{'Balance':<12}{'Description'}")
     for e in entries:
-        print(f"{e['Seq']:<5}{e['Date']:<12}{e['Person']:<20}{e['Type']:<15}{e['Amount']:<10}{e['RunningBalance']:<16}{e['Description']}")
-
-    # Summary Line at the Bottom
+        print(f"{e['Seq']:<5}{e['Date']:<12}{e['Person']:<20}{e['Type']:<15}{e['Amount']:<10}{e['RunningBalance']:<12}{e['Description']}")
+    total_contrib = sum(float(e["Amount"]) for e in entries if e["Type"].lower() == "contribution")
+    total_exp = sum(float(e["Amount"]) for e in entries if e["Type"].lower() == "expense")
+    balance = float(entries[-1]["RunningBalance"]) if entries else 0
     print(f"\nSummary → Contributions: {total_contrib}, Expenses: {total_exp}, Current Balance: {balance}")
 
 def save_entries(entries, silent=False):
@@ -42,8 +31,7 @@ def save_entries(entries, silent=False):
         confirm = input("Are you sure you want to save changes? (Y/N): ").strip().lower()
         if confirm != "y":
             print("❌ Save cancelled.")
-            return entries
-
+            return
     fieldnames = ["Seq","Date","Person","Type","Amount","RunningBalance","Description"]
     with open(CSV_FILE, "w", newline="") as f:
         writer = csv.DictWriter(
@@ -55,14 +43,13 @@ def save_entries(entries, silent=False):
         writer.writeheader()
         writer.writerows(entries)
     print("✅ Data saved to data.csv")
-    return entries
 
 def push_to_github(entries):
     confirm = input("Are you sure you want to push changes to GitHub? (Y/N): ").strip().lower()
     if confirm != "y":
         print("❌ Push cancelled.")
-        return entries
-    entries = save_entries(entries, silent=True)
+        return
+    save_entries(entries, silent=True)
     try:
         subprocess.run(["git", "add", CSV_FILE], check=True)
         subprocess.run(["git", "commit", "-m", "Update tracker data"], check=True)
@@ -70,7 +57,6 @@ def push_to_github(entries):
         print("✅ Changes pushed to GitHub")
     except subprocess.CalledProcessError as e:
         print(f"❌ Git command failed: {e}")
-    return entries
 
 def sanitize_description(text: str) -> str:
     return text.replace(",", " - ").strip()
@@ -157,7 +143,7 @@ def remove_entry(entries):
     return new_entries
 
 # ---------------------------------------------------------
-# ✅ Edit Entry
+# ✅ NEW: Edit Entry
 # ---------------------------------------------------------
 def edit_entry(entries):
     seq = input("Enter Seq # to edit (or 'C' to cancel): ").strip()
@@ -220,9 +206,9 @@ def main():
         elif choice == "r":
             entries = remove_entry(entries)
         elif choice == "s":
-            entries = save_entries(entries)
+            save_entries(entries)
         elif choice == "p":
-            entries = push_to_github(entries)
+            push_to_github(entries)
         elif choice == "q":
             break
         else:
@@ -230,5 +216,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 

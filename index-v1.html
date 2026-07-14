@@ -16,17 +16,6 @@
       margin-bottom: 15px;
       color: #444;
     }
-    /* ✅ Styling for the top summary container */
-    .summary-header {
-      background: #e6f2ff;
-      border-left: 5px solid #007acc;
-      padding: 12px;
-      margin-bottom: 15px;
-      border-radius: 4px;
-      font-weight: bold;
-      font-size: 14px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-    }
     .table-container {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -71,11 +60,6 @@
 </head>
 <body>
   <h2>Expense Tracker</h2>
-
-  <div id="top-summary" class="summary-header">
-    Loading summary...
-  </div>
-
   <div class="table-container">
     <table>
       <thead>
@@ -108,7 +92,6 @@
         const data = rows.slice(1);
 
         const tbody = document.getElementById("entries");
-        const topSummary = document.getElementById("top-summary");
         const summaryLine1 = document.getElementById("summary-line1");
         const summaryLine2 = document.getElementById("summary-line2");
         const summaryLine3 = document.getElementById("summary-line3");
@@ -117,8 +100,6 @@
         let totalContrib = 0, totalExp = 0, balance = 0;
 
         data.forEach(row => {
-          if (!row || row.length < 6) return; // guard against empty rows
-
           const tr = document.createElement("tr");
           row.forEach((cell, idx) => {
             const td = document.createElement("td");
@@ -138,10 +119,6 @@
           if (type === "expense") totalExp += amount;
         });
 
-        // Set Top Summary Line text
-        topSummary.textContent = `Summary → Contributions: ${totalContrib}, Expenses: ${totalExp}, Current Balance: ${balance}`;
-
-        // Set Bottom Footer Summary text
         summaryLine1.textContent = `Total Contributions: ${totalContrib}`;
         summaryLine2.textContent = `Total Expenses: ${totalExp}`;
         summaryLine3.textContent = `Current Balance: ${balance}`;
