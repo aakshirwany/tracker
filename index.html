@@ -6,15 +6,16 @@
   <title>Expense Tracker</title>
   <style>
     body {
-      font-family: system-ui, sans-serif;
-      margin: 15px;
-      background: #f9f9f9;
-      color: #333;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 20px;
+      background: #f4f6f8;
+      color: #2D3748;
     }
     h2 {
       text-align: center;
-      margin-bottom: 20px;
-      color: #444;
+      margin-bottom: 25px;
+      color: #1A202C;
+      font-weight: 700;
     }
 
     /* Premium Metric Cards Container */
@@ -30,7 +31,7 @@
       background: #fff;
       padding: 15px;
       border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       border-top: 4px solid #ccc;
       display: flex;
       flex-direction: column;
@@ -46,75 +47,132 @@
     }
 
     .card.balance {
-      border-top-color: #007acc; /* blue */
+      border-top-color: #3182ce; /* blue */
     }
 
     .card-title {
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #777;
+      color: #718096;
       font-weight: 600;
     }
 
     .card-value {
       font-size: 20px;
       font-weight: bold;
-      color: #222;
+      color: #1A202C;
     }
 
+    /* Modern Table Container */
     .table-container {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       background: #fff;
-      border-radius: 6px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      border: 1px solid #E2E8F0;
     }
     table {
       width: 100%;
       border-collapse: collapse;
       min-width: 600px;
     }
-    th, td {
-      padding: 12px;
-      border-bottom: 1px solid #ddd;
-      text-align: left;
-      font-size: 14px;
-      white-space: nowrap;
-    }
 
-    /* Sortable Headers */
+    /* Modernized Header Styling */
     th {
-      background: #007acc;
-      color: #fff;
-      font-weight: bold;
+      background: #F7FAFC;
+      color: #4A5568;
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid #EDF2F7;
       cursor: pointer;
       user-select: none;
       position: relative;
-      transition: background 0.2s;
+      transition: background 0.2s, color 0.2s;
     }
     th:hover {
-      background: #005a99;
+      background: #EDF2F7;
+      color: #2D3748;
     }
-    .sort-icon {
-      margin-left: 5px;
-      font-size: 12px;
+    th, td {
+      padding: 14px 18px;
+      text-align: left;
+      white-space: nowrap;
     }
 
-    tr:nth-child(even) {
-      background: #f5faff;
+    /* Clean Row Borders and Interactive Hovering */
+    tbody tr {
+      border-bottom: 1px solid #EDF2F7;
+      transition: background-color 0.15s ease;
     }
+    tbody tr:hover {
+      background-color: #F7FAFC;
+    }
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    td {
+      font-size: 14px;
+      color: #4A5568;
+    }
+
+    /* Style for Sequence column */
+    td.seq {
+      font-weight: 500;
+      color: #A0AEC0;
+    }
+
+    /* Style for Amount column */
+    td.amount {
+      font-weight: 600;
+    }
+
+    /* Pill Badges for Type Column */
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge.contribution {
+      background-color: #E6FFFA;
+      color: #047481;
+    }
+    .badge.expense {
+      background-color: #FFF5F5;
+      color: #C53030;
+    }
+
+    /* Sort Indicators */
+    .sort-icon {
+      margin-left: 5px;
+      font-size: 10px;
+      color: #4A5568;
+    }
+
+    /* Elegant Table Footer */
     tfoot td {
       font-weight: bold;
-      background: #e6f2ff;
+      background: #F7FAFC;
       text-align: left;
       font-size: 12px;
-      padding: 6px;
+      padding: 10px 18px;
+      color: #718096;
+      border-top: 2px solid #EDF2F7;
     }
+
     td.description {
       white-space: normal;
       word-wrap: break-word;
       max-width: 250px;
+      color: #718096; /* Subtle coloring for description */
     }
   </style>
 </head>
@@ -176,7 +234,6 @@
       };
       const month = months[parts[1].toLowerCase()] || 0;
 
-      // Assume 2000s for YY
       let year = parseInt(parts[2], 10);
       if (year < 100) year += 2000;
 
@@ -215,7 +272,7 @@
         summaryLine2.textContent = `Total Expenses: ${totalExp}`;
         summaryLine3.textContent = `Current Balance: ${balance}`;
 
-        // Reverse the items initially to show the newest entries on top (assuming default is chronologically ascending)
+        // Reverse the items initially to show newest entries on top
         globalEntries.reverse();
 
         renderTable(globalEntries);
@@ -230,12 +287,39 @@
 
       entries.forEach(row => {
         const tr = document.createElement("tr");
+
         row.forEach((cell, idx) => {
           const td = document.createElement("td");
-          td.textContent = cell;
+
+          if (idx === 0) {
+            // Sequence styling
+            td.textContent = cell;
+            td.classList.add("seq");
+          } else if (idx === 3) {
+            // Pill Badge for Types
+            const badge = document.createElement("span");
+            badge.textContent = cell;
+            badge.className = `badge ${cell.toLowerCase()}`;
+            td.appendChild(badge);
+          } else if (idx === 4) {
+            // Colorized text for Amount
+            const isExpense = row[3].toLowerCase() === 'expense';
+            td.textContent = (isExpense ? "-$" : "$") + parseFloat(cell).toFixed(2);
+            td.style.color = isExpense ? "#C53030" : "#2F855A";
+            td.classList.add("amount");
+          } else if (idx === 5) {
+            // Formatted running balance
+            const balanceVal = parseFloat(cell);
+            td.textContent = (balanceVal < 0 ? "-$" : "$") + Math.abs(balanceVal).toFixed(2);
+            td.style.fontWeight = "600";
+          } else {
+            td.textContent = cell;
+          }
+
           if (idx === 6) {
             td.classList.add("description");
           }
+
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
@@ -243,7 +327,6 @@
     }
 
     function sortTable(colIndex, type) {
-      // Toggle sort directions
       if (currentSortColumn === colIndex) {
         currentSortAscending = !currentSortAscending;
       } else {
@@ -251,7 +334,6 @@
         currentSortAscending = true;
       }
 
-      // Perform sort logic
       globalEntries.sort((a, b) => {
         let valA = a[colIndex] ? a[colIndex].trim() : '';
         let valB = b[colIndex] ? b[colIndex].trim() : '';
@@ -264,18 +346,17 @@
           const dateA = parseDate(valA);
           const dateB = parseDate(valB);
           return currentSortAscending ? dateA - dateB : dateB - dateA;
-        } else { // String sort
+        } else {
           return currentSortAscending
             ? valA.localeCompare(valB)
             : valB.localeCompare(valA);
         }
       });
 
-      // Update Header Icons
       for (let i = 0; i <= 5; i++) {
         const iconSpan = document.getElementById(`sort-icon-${i}`);
         if (i === colIndex) {
-          iconSpan.textContent = currentSortAscending ? "▲" : "▼";
+          iconSpan.textContent = currentSortAscending ? " ▲" : " ▼";
         } else {
           iconSpan.textContent = "";
         }
