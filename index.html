@@ -76,7 +76,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 600px;
+      min-width: 500px;
     }
 
     /* Modernized Header Styling */
@@ -120,10 +120,10 @@
       color: #4A5568;
     }
 
-    /* Style for Sequence column */
-    td.seq {
+    /* Styled Date column */
+    td.date {
+      color: #2B6CB0;
       font-weight: 500;
-      color: #A0AEC0;
     }
 
     /* Style for Amount column */
@@ -172,7 +172,7 @@
       white-space: normal;
       word-wrap: break-word;
       max-width: 250px;
-      color: #718096; /* Subtle coloring for description */
+      color: #718096;
     }
   </style>
 </head>
@@ -198,7 +198,6 @@
     <table>
       <thead>
         <tr>
-          <th onclick="sortTable(0, 'number')">Seq <span id="sort-icon-0" class="sort-icon"></span></th>
           <th onclick="sortTable(1, 'date')">Date <span id="sort-icon-1" class="sort-icon"></span></th>
           <th onclick="sortTable(2, 'string')">Person/Shop <span id="sort-icon-2" class="sort-icon"></span></th>
           <th onclick="sortTable(3, 'string')">Type <span id="sort-icon-3" class="sort-icon"></span></th>
@@ -209,9 +208,9 @@
       </thead>
       <tbody id="entries"></tbody>
       <tfoot>
-        <tr><td colspan="7" id="summary-line1"></td></tr>
-        <tr><td colspan="7" id="summary-line2"></td></tr>
-        <tr><td colspan="7" id="summary-line3"></td></tr>
+        <tr><td colspan="6" id="summary-line1"></td></tr>
+        <tr><td colspan="6" id="summary-line2"></td></tr>
+        <tr><td colspan="6" id="summary-line3"></td></tr>
       </tfoot>
     </table>
   </div>
@@ -238,6 +237,18 @@
       if (year < 100) year += 2000;
 
       return new Date(year, month, day);
+    }
+
+    // ✅ Custom Helper: Formats "15-Jul-26" into "15 July, 2026"
+    function formatPrettyDate(dateStr) {
+      const dateObj = parseDate(dateStr);
+      if (isNaN(dateObj.getTime())) return dateStr; // fallback
+
+      const day = dateObj.getDate();
+      const month = dateObj.toLocaleDateString('en-US', { month: 'long' });
+      const year = dateObj.getFullYear();
+
+      return `${day} ${month}, ${year}`;
     }
 
     async function loadEntries() {
@@ -289,12 +300,15 @@
         const tr = document.createElement("tr");
 
         row.forEach((cell, idx) => {
+          // Skip the first column (Seq number, index 0)
+          if (idx === 0) return;
+
           const td = document.createElement("td");
 
-          if (idx === 0) {
-            // Sequence styling
-            td.textContent = cell;
-            td.classList.add("seq");
+          if (idx === 1) {
+            // Pretty custom format ("15 July, 2026")
+            td.textContent = formatPrettyDate(cell);
+            td.classList.add("date");
           } else if (idx === 3) {
             // Pill Badge for Types
             const badge = document.createElement("span");
@@ -353,7 +367,8 @@
         }
       });
 
-      for (let i = 0; i <= 5; i++) {
+      // Update sort indicators (skipping index 0 because Seq is removed)
+      for (let i = 1; i <= 5; i++) {
         const iconSpan = document.getElementById(`sort-icon-${i}`);
         if (i === colIndex) {
           iconSpan.textContent = currentSortAscending ? " ▲" : " ▼";
