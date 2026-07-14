@@ -7,26 +7,62 @@
   <style>
     body {
       font-family: system-ui, sans-serif;
-      margin: 10px;
+      margin: 15px;
       background: #f9f9f9;
       color: #333;
     }
     h2 {
       text-align: center;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       color: #444;
     }
-    /* ✅ Styling for the top summary container */
-    .summary-header {
-      background: #e6f2ff;
-      border-left: 5px solid #007acc;
-      padding: 12px;
-      margin-bottom: 15px;
-      border-radius: 4px;
-      font-weight: bold;
-      font-size: 14px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+
+    /* ✅ Premium Metric Cards Container */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
     }
+
+    /* ✅ Individual Card Styles */
+    .card {
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      border-top: 4px solid #ccc;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .card.contributions {
+      border-top-color: #2ec4b6; /* teal */
+    }
+
+    .card.expenses {
+      border-top-color: #e71d36; /* red */
+    }
+
+    .card.balance {
+      border-top-color: #007acc; /* blue */
+    }
+
+    .card-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #777;
+      font-weight: 600;
+    }
+
+    .card-value {
+      font-size: 20px;
+      font-weight: bold;
+      color: #222;
+    }
+
     .table-container {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -44,7 +80,7 @@
       border-bottom: 1px solid #ddd;
       text-align: left;
       font-size: 14px;
-      white-space: nowrap; /* keep most columns on one line */
+      white-space: nowrap;
     }
     th {
       background: #007acc;
@@ -58,22 +94,32 @@
       font-weight: bold;
       background: #e6f2ff;
       text-align: left;
-      font-size: 12px; /* smaller font for summary */
+      font-size: 12px;
       padding: 6px;
     }
-    /* ✅ Allow wrapping only in Description column */
     td.description {
       white-space: normal;
       word-wrap: break-word;
-      max-width: 250px; /* adjust width as needed */
+      max-width: 250px;
     }
   </style>
 </head>
 <body>
   <h2>Expense Tracker</h2>
 
-  <div id="top-summary" class="summary-header">
-    Loading summary...
+  <div class="summary-grid">
+    <div class="card contributions">
+      <div class="card-title">Total Contributions</div>
+      <div id="top-contrib" class="card-value">—</div>
+    </div>
+    <div class="card expenses">
+      <div class="card-title">Total Expenses</div>
+      <div id="top-exp" class="card-value">—</div>
+    </div>
+    <div class="card balance">
+      <div class="card-title">Current Balance</div>
+      <div id="top-balance" class="card-value">—</div>
+    </div>
   </div>
 
   <div class="table-container">
@@ -101,14 +147,17 @@
   <script>
     async function loadEntries() {
       try {
-        const response = await fetch("data.csv"); // assumes data.csv is hosted alongside
+        const response = await fetch("data.csv");
         const text = await response.text();
         const rows = text.trim().split("\n").map(r => r.split(","));
         const headers = rows[0];
         const data = rows.slice(1);
 
         const tbody = document.getElementById("entries");
-        const topSummary = document.getElementById("top-summary");
+        const topContrib = document.getElementById("top-contrib");
+        const topExp = document.getElementById("top-exp");
+        const topBalance = document.getElementById("top-balance");
+
         const summaryLine1 = document.getElementById("summary-line1");
         const summaryLine2 = document.getElementById("summary-line2");
         const summaryLine3 = document.getElementById("summary-line3");
@@ -117,20 +166,19 @@
         let totalContrib = 0, totalExp = 0, balance = 0;
 
         data.forEach(row => {
-          if (!row || row.length < 6) return; // guard against empty rows
+          if (!row || row.length < 6) return;
 
           const tr = document.createElement("tr");
           row.forEach((cell, idx) => {
             const td = document.createElement("td");
             td.textContent = cell;
-            if (idx === 6) { // ✅ Description column
+            if (idx === 6) {
               td.classList.add("description");
             }
             tr.appendChild(td);
           });
           tbody.appendChild(tr);
 
-          // Totals
           const type = row[3].toLowerCase();
           const amount = parseFloat(row[4]) || 0;
           balance = parseFloat(row[5]) || balance;
@@ -138,10 +186,12 @@
           if (type === "expense") totalExp += amount;
         });
 
-        // Set Top Summary Line text
-        topSummary.textContent = `Summary → Contributions: ${totalContrib}, Expenses: ${totalExp}, Current Balance: ${balance}`;
+        // Set top dashboard card values
+        topContrib.textContent = totalContrib.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        topExp.textContent = totalExp.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        topBalance.textContent = balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-        // Set Bottom Footer Summary text
+        // Keep bottom table summary matching
         summaryLine1.textContent = `Total Contributions: ${totalContrib}`;
         summaryLine2.textContent = `Total Expenses: ${totalExp}`;
         summaryLine3.textContent = `Current Balance: ${balance}`;
