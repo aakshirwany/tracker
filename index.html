@@ -199,10 +199,10 @@
       <thead>
         <tr>
           <th onclick="sortTable(1, 'date')">Date <span id="sort-icon-1" class="sort-icon"></span></th>
-          <th onclick="sortTable(2, 'string')">Person/Shop <span id="sort-icon-2" class="sort-icon"></span></th>
           <th onclick="sortTable(3, 'string')">Type <span id="sort-icon-3" class="sort-icon"></span></th>
           <th onclick="sortTable(4, 'number')">Amount <span id="sort-icon-4" class="sort-icon"></span></th>
           <th onclick="sortTable(5, 'number')">Balance <span id="sort-icon-5" class="sort-icon"></span></th>
+          <th onclick="sortTable(2, 'string')">Person/Shop <span id="sort-icon-2" class="sort-icon"></span></th>
           <th>Description</th>
         </tr>
       </thead>
@@ -239,7 +239,7 @@
       return new Date(year, month, day);
     }
 
-    // ✅ Custom Helper: Formats "15-Jul-26" into "15.07.2026" (with leading zeros)
+    // Custom Helper: Formats "15-Jul-26" into "15.07.2026" (with leading zeros)
     function formatPrettyDate(dateStr) {
       const dateObj = parseDate(dateStr);
       if (isNaN(dateObj.getTime())) return dateStr; // fallback
@@ -296,17 +296,20 @@
       const tbody = document.getElementById("entries");
       tbody.innerHTML = "";
 
+      // Original CSV row index mapping:
+      // [0] = Seq, [1] = Date, [2] = Person/Shop, [3] = Type, [4] = Amount, [5] = Balance, [6] = Description
+      // Wanted layout: Date (1) -> Type (3) -> Amount (4) -> Balance (5) -> Person/Shop (2) -> Description (6)
+      const renderOrder = [1, 3, 4, 5, 2, 6];
+
       entries.forEach(row => {
         const tr = document.createElement("tr");
 
-        row.forEach((cell, idx) => {
-          // Skip the first column (Seq number, index 0)
-          if (idx === 0) return;
-
+        renderOrder.forEach(idx => {
+          const cell = row[idx] || "";
           const td = document.createElement("td");
 
           if (idx === 1) {
-            // Pretty dot format with leading zeros ("15.07.2026")
+            // Pretty custom dot format with leading zeros ("15.07.2026")
             td.textContent = formatPrettyDate(cell);
             td.classList.add("date");
           } else if (idx === 3) {
@@ -367,15 +370,18 @@
         }
       });
 
-      // Update sort indicators (skipping index 0 because Seq is removed)
-      for (let i = 1; i <= 5; i++) {
+      // Update sort indicators (mapped to exact CSV indexes being sorted)
+      const sortableIndexes = [1, 2, 3, 4, 5];
+      sortableIndexes.forEach(i => {
         const iconSpan = document.getElementById(`sort-icon-${i}`);
-        if (i === colIndex) {
-          iconSpan.textContent = currentSortAscending ? " ▲" : " ▼";
-        } else {
-          iconSpan.textContent = "";
+        if (iconSpan) {
+          if (i === colIndex) {
+            iconSpan.textContent = currentSortAscending ? " ▲" : " ▼";
+          } else {
+            iconSpan.textContent = "";
+          }
         }
-      }
+      });
 
       renderTable(globalEntries);
     }
