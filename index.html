@@ -239,13 +239,13 @@
       return new Date(year, month, day);
     }
 
-    // ✅ Custom Helper: Formats "15-Jul-26" into "15.7.2026"
+    // ✅ Custom Helper: Formats "15-Jul-26" into "15.07.2026" (with leading zeros)
     function formatPrettyDate(dateStr) {
       const dateObj = parseDate(dateStr);
       if (isNaN(dateObj.getTime())) return dateStr; // fallback
 
-      const day = dateObj.getDate();
-      const month = dateObj.getMonth() + 1; // getMonth() is 0-indexed (0 = Jan)
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // getMonth() is 0-indexed
       const year = dateObj.getFullYear();
 
       return `${day}.${month}.${year}`;
@@ -306,7 +306,7 @@
           const td = document.createElement("td");
 
           if (idx === 1) {
-            // Pretty custom dot format ("15.7.2026")
+            // Pretty dot format with leading zeros ("15.07.2026")
             td.textContent = formatPrettyDate(cell);
             td.classList.add("date");
           } else if (idx === 3) {
