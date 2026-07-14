@@ -239,16 +239,16 @@
       return new Date(year, month, day);
     }
 
-    // ✅ Custom Helper: Formats "15-Jul-26" into "15 July, 2026"
+    // ✅ Custom Helper: Formats "15-Jul-26" into "15.7.2026"
     function formatPrettyDate(dateStr) {
       const dateObj = parseDate(dateStr);
       if (isNaN(dateObj.getTime())) return dateStr; // fallback
 
       const day = dateObj.getDate();
-      const month = dateObj.toLocaleDateString('en-US', { month: 'long' });
+      const month = dateObj.getMonth() + 1; // getMonth() is 0-indexed (0 = Jan)
       const year = dateObj.getFullYear();
 
-      return `${day} ${month}, ${year}`;
+      return `${day}.${month}.${year}`;
     }
 
     async function loadEntries() {
@@ -306,7 +306,7 @@
           const td = document.createElement("td");
 
           if (idx === 1) {
-            // Pretty custom format ("15 July, 2026")
+            // Pretty custom dot format ("15.7.2026")
             td.textContent = formatPrettyDate(cell);
             td.classList.add("date");
           } else if (idx === 3) {
