@@ -11,7 +11,7 @@
       background: #f4f6f8;
       color: #2D3748;
     }
-
+    
     .top-bar {
       margin-bottom: 20px;
     }
@@ -21,7 +21,7 @@
       font-weight: 700;
     }
 
-    /* Form Styles */
+    /* Input Form Styles */
     .form-container {
       background: #fff;
       padding: 20px;
@@ -76,7 +76,9 @@
       font-size: 14px;
       transition: opacity 0.2s;
     }
-    .btn:hover { opacity: 0.9; }
+    .btn:hover {
+      opacity: 0.9;
+    }
     .btn-submit { background: #3182ce; color: white; }
     .btn-sync { background: #2ec4b6; color: white; }
     .btn-delete {
@@ -96,7 +98,7 @@
       border-color: #E53E3E;
     }
 
-    /* Cards */
+    /* Metric Cards Container */
     .summary-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -129,7 +131,7 @@
       color: #1A202C;
     }
 
-    /* Table */
+    /* Modern Table Container */
     .table-container {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -165,6 +167,7 @@
     td.date { color: #2B6CB0; font-weight: 500; }
     td.amount { font-weight: 600; }
 
+    /* Pill Badges */
     .badge {
       display: inline-block;
       padding: 4px 10px;
@@ -177,8 +180,10 @@
     .badge.contribution { background-color: #E6FFFA; color: #047481; }
     .badge.expense { background-color: #FFF5F5; color: #C53030; }
 
+    /* Sort Indicators */
     .sort-icon { margin-left: 5px; font-size: 10px; color: #4A5568; }
 
+    /* Table Footer */
     tfoot td {
       font-weight: bold;
       background: #F7FAFC;
@@ -202,8 +207,8 @@
     <h2>Expense Tracker</h2>
   </div>
 
-  <!-- Entry Form Section (Only useful on Localhost) -->
-  <div class="form-container" id="formWrapper">
+  <!-- Entry Form Section -->
+  <div class="form-container">
     <h3>Add New Entry</h3>
     <form id="entryForm" class="form-grid">
       <div class="form-group">
@@ -230,7 +235,7 @@
     </form>
   </div>
 
-  <!-- Summary Cards -->
+  <!-- Metric Summary Cards -->
   <div class="summary-grid">
     <div class="card contributions">
       <div class="card-title">Total Contributions</div>
@@ -257,7 +262,7 @@
           <th onclick="sortTable(5, 'number')">Balance <span id="sort-icon-5" class="sort-icon"></span></th>
           <th onclick="sortTable(2, 'string')">Person/Shop <span id="sort-icon-2" class="sort-icon"></span></th>
           <th>Description</th>
-          <th id="actionHeader">Action</th>
+          <th style="cursor: default;">Action</th>
         </tr>
       </thead>
       <tbody id="entries"></tbody>
@@ -273,19 +278,22 @@
     let globalEntries = [];
     let currentSortColumn = -1;
     let currentSortAscending = true;
-    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-    // Hide input controls when viewing on GitHub Pages (static site mode)
-    if (!isLocalhost) {
-      document.getElementById('formWrapper').style.display = 'none';
-      document.getElementById('actionHeader').style.display = 'none';
-    }
-
+<<<<<<< Updated upstream
+    // Helper: Currency Formatting for NOK
+=======
+    // Currency Formatting Helper for NOK
+>>>>>>> Stashed changes
     function formatNOK(val) {
       const num = parseFloat(val) || 0;
       return num.toLocaleString('no-NO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " kr";
     }
 
+<<<<<<< Updated upstream
+    // Helper: Parse DD-Mon-YY string (e.g., "15-Jul-26") to a Date object
+=======
+    // --- Date Parsing Utilities ---
+>>>>>>> Stashed changes
     function parseDate(dateStr) {
       if (!dateStr) return new Date(0);
       const parts = dateStr.split('-');
@@ -312,44 +320,46 @@
       return `${day}.${month}.${year}`;
     }
 
-    // Smart Load Method
+    // --- API Data Fetching ---
     async function loadEntries() {
       try {
-        let rawData = [];
-
-        if (isLocalhost) {
-          // Fetch from Flask Backend API
-          const response = await fetch("/api/entries");
-          const json = await response.json();
-          rawData = json.map(row => [row.Seq, row.Date, row.Person, row.Type, row.Amount, row.RunningBalance, row.Description]);
-        } else {
-          // Fetch directly from static CSV file on GitHub Pages
-          const response = await fetch("data.csv");
-          const text = await response.text();
-          const rows = text.trim().split("\n").map(r => r.split(","));
-          rawData = rows.slice(1); // skip header
-        }
+        const response = await fetch("/api/entries");
+        const data = await response.json();
 
         let totalContrib = 0, totalExp = 0, balance = 0;
         globalEntries = [];
 
-        rawData.forEach(row => {
-          if (!row || row.length < 6) return;
-
-          const type = (row[3] || "").toLowerCase();
-          const amount = parseFloat(row[4]) || 0;
-          balance = parseFloat(row[5]) || balance;
+        data.forEach(row => {
+          const type = (row.Type || "").toLowerCase();
+          const amount = parseFloat(row.Amount) || 0;
+          balance = parseFloat(row.RunningBalance) || balance;
 
           if (type === "contribution") totalContrib += amount;
           if (type === "expense") totalExp += amount;
 
-          globalEntries.push(row);
+          globalEntries.push([
+            row.Seq, 
+            row.Date, 
+            row.Person, 
+            row.Type, 
+            row.Amount, 
+            row.RunningBalance, 
+            row.Description
+          ]);
         });
 
+<<<<<<< Updated upstream
+        // Set top dashboard card values in NOK
+=======
+>>>>>>> Stashed changes
         topContrib.textContent = formatNOK(totalContrib);
         topExp.textContent = formatNOK(totalExp);
         topBalance.textContent = formatNOK(balance);
 
+<<<<<<< Updated upstream
+        // Keep bottom table summary matching in NOK
+=======
+>>>>>>> Stashed changes
         summaryLine1.textContent = `Total Contributions: ${formatNOK(totalContrib)}`;
         summaryLine2.textContent = `Total Expenses: ${formatNOK(totalExp)}`;
         summaryLine3.textContent = `Current Balance: ${formatNOK(balance)}`;
@@ -383,12 +393,21 @@
             badge.className = `badge ${cell.toLowerCase()}`;
             td.appendChild(badge);
           } else if (idx === 4) {
+<<<<<<< Updated upstream
+            // Colorized text for Amount formatted in NOK
+            const isExpense = row[3].toLowerCase() === 'expense';
+=======
             const isExpense = (row[3] || "").toLowerCase() === 'expense';
+>>>>>>> Stashed changes
             const val = parseFloat(cell) || 0;
             td.textContent = (isExpense ? "- " : "") + formatNOK(val);
             td.style.color = isExpense ? "#C53030" : "#2F855A";
             td.classList.add("amount");
           } else if (idx === 5) {
+<<<<<<< Updated upstream
+            // Formatted running balance in NOK
+=======
+>>>>>>> Stashed changes
             const balanceVal = parseFloat(cell) || 0;
             td.textContent = formatNOK(balanceVal);
             td.style.fontWeight = "600";
@@ -403,21 +422,20 @@
           tr.appendChild(td);
         });
 
-        // Add Delete Button if running on Localhost
-        if (isLocalhost) {
-          const actionTd = document.createElement("td");
-          const deleteBtn = document.createElement("button");
-          deleteBtn.textContent = "Delete";
-          deleteBtn.className = "btn-delete";
-          deleteBtn.onclick = () => deleteEntry(row[0]);
-          actionTd.appendChild(deleteBtn);
-          tr.appendChild(actionTd);
-        }
+        // Delete button
+        const actionTd = document.createElement("td");
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.className = "btn-delete";
+        deleteBtn.onclick = () => deleteEntry(row[0]);
+        actionTd.appendChild(deleteBtn);
+        tr.appendChild(actionTd);
 
         tbody.appendChild(tr);
       });
     }
 
+    // --- Delete Operation ---
     async function deleteEntry(seq) {
       if (!confirm(`Are you sure you want to delete entry #${seq}?`)) return;
 
@@ -477,53 +495,54 @@
       renderTable(globalEntries);
     }
 
-    if (isLocalhost) {
-      document.getElementById('entryForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
+    // Submit entry
+    document.getElementById('entryForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-        const payload = {
-          type: document.getElementById('formType').value,
-          person: document.getElementById('formPerson').value,
-          amount: document.getElementById('formAmount').value,
-          description: document.getElementById('formDesc').value
-        };
+      const payload = {
+        type: document.getElementById('formType').value,
+        person: document.getElementById('formPerson').value,
+        amount: document.getElementById('formAmount').value,
+        description: document.getElementById('formDesc').value
+      };
 
-        try {
-          const response = await fetch('/api/entries', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
+      try {
+        const response = await fetch('/api/entries', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
 
-          if (response.ok) {
-            document.getElementById('entryForm').reset();
-            loadEntries();
-          } else {
-            alert("Error saving entry.");
-          }
-        } catch (err) {
-          console.error("Submission failed:", err);
+        if (response.ok) {
+          document.getElementById('entryForm').reset();
+          loadEntries();
+        } else {
+          alert("Error saving entry.");
         }
-      });
+      } catch (err) {
+        console.error("Submission failed:", err);
+      }
+    });
 
-      document.getElementById('gitPushBtn').addEventListener('click', async () => {
-        if (!confirm("Are you sure you want to push changes to GitHub?")) return;
+    // Handle Git Sync Button
+    document.getElementById('gitPushBtn').addEventListener('click', async () => {
+      if (!confirm("Are you sure you want to push changes to GitHub?")) return;
 
-        try {
-          const response = await fetch('/api/git-push', { method: 'POST' });
-          const result = await response.json();
+      try {
+        const response = await fetch('/api/git-push', { method: 'POST' });
+        const result = await response.json();
 
-          if (result.success) {
-            alert("✅ " + result.message);
-          } else {
-            alert("❌ Git Error: " + result.error);
-          }
-        } catch (err) {
-          alert("Failed to execute push request.");
+        if (result.success) {
+          alert("✅ " + result.message);
+        } else {
+          alert("❌ Git Error: " + result.error);
         }
-      });
-    }
+      } catch (err) {
+        alert("Failed to execute push request.");
+      }
+    });
 
+    // Element Selectors
     const topContrib = document.getElementById("top-contrib");
     const topExp = document.getElementById("top-exp");
     const topBalance = document.getElementById("top-balance");
@@ -531,9 +550,9 @@
     const summaryLine2 = document.getElementById("summary-line2");
     const summaryLine3 = document.getElementById("summary-line3");
 
+    // Initialize Page View
     loadEntries();
   </script>
 </body>
 </html>
-
 
