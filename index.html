@@ -220,6 +220,12 @@
     let currentSortColumn = -1;
     let currentSortAscending = true;
 
+    // Helper: Currency Formatting for NOK
+    function formatNOK(val) {
+      const num = parseFloat(val) || 0;
+      return num.toLocaleString('no-NO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " kr";
+    }
+
     // Helper: Parse DD-Mon-YY string (e.g., "15-Jul-26") to a Date object
     function parseDate(dateStr) {
       if (!dateStr) return new Date(0);
@@ -273,15 +279,15 @@
           globalEntries.push(row);
         });
 
-        // Set top dashboard card values
-        topContrib.textContent = totalContrib.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        topExp.textContent = totalExp.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        topBalance.textContent = balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        // Set top dashboard card values in NOK
+        topContrib.textContent = formatNOK(totalContrib);
+        topExp.textContent = formatNOK(totalExp);
+        topBalance.textContent = formatNOK(balance);
 
-        // Keep bottom table summary matching
-        summaryLine1.textContent = `Total Contributions: ${totalContrib}`;
-        summaryLine2.textContent = `Total Expenses: ${totalExp}`;
-        summaryLine3.textContent = `Current Balance: ${balance}`;
+        // Keep bottom table summary matching in NOK
+        summaryLine1.textContent = `Total Contributions: ${formatNOK(totalContrib)}`;
+        summaryLine2.textContent = `Total Expenses: ${formatNOK(totalExp)}`;
+        summaryLine3.textContent = `Current Balance: ${formatNOK(balance)}`;
 
         // Reverse the items initially to show newest entries on top
         globalEntries.reverse();
@@ -319,15 +325,16 @@
             badge.className = `badge ${cell.toLowerCase()}`;
             td.appendChild(badge);
           } else if (idx === 4) {
-            // Colorized text for Amount
+            // Colorized text for Amount formatted in NOK
             const isExpense = row[3].toLowerCase() === 'expense';
-            td.textContent = (isExpense ? "-$" : "$") + parseFloat(cell).toFixed(2);
+            const val = parseFloat(cell) || 0;
+            td.textContent = (isExpense ? "- " : "") + formatNOK(val);
             td.style.color = isExpense ? "#C53030" : "#2F855A";
             td.classList.add("amount");
           } else if (idx === 5) {
-            // Formatted running balance
-            const balanceVal = parseFloat(cell);
-            td.textContent = (balanceVal < 0 ? "-$" : "$") + Math.abs(balanceVal).toFixed(2);
+            // Formatted running balance in NOK
+            const balanceVal = parseFloat(cell) || 0;
+            td.textContent = formatNOK(balanceVal);
             td.style.fontWeight = "600";
           } else {
             td.textContent = cell;
