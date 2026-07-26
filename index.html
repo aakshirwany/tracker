@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Expense Tracker</title>
+  <title>Expense Tracker Editor</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -12,14 +12,8 @@
       color: #2D3748;
     }
 
-    .top-bar {
-      margin-bottom: 20px;
-    }
-    h2 {
-      margin: 0;
-      color: #1A202C;
-      font-weight: 700;
-    }
+    .top-bar { margin-bottom: 20px; }
+    h2 { margin: 0; color: #1A202C; font-weight: 700; }
 
     /* Form Styles */
     .form-container {
@@ -30,32 +24,10 @@
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
       border: 1px solid #E2E8F0;
     }
-    .form-container h3 {
-      margin-top: 0;
-      margin-bottom: 15px;
-      font-size: 16px;
-      color: #2D3748;
-    }
-    .form-grid {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: flex-end;
-    }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      flex: 1;
-      min-width: 140px;
-    }
-    .form-group label {
-      font-size: 12px;
-      font-weight: 600;
-      color: #718096;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+    .form-container h3 { margin-top: 0; margin-bottom: 15px; font-size: 16px; color: #2D3748; }
+    .form-grid { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 140px; }
+    .form-group label { font-size: 12px; font-weight: 600; color: #718096; text-transform: uppercase; letter-spacing: 0.5px; }
     .form-group input, .form-group select {
       padding: 9px 12px;
       border-radius: 6px;
@@ -64,21 +36,28 @@
       outline: none;
       transition: border-color 0.2s;
     }
-    .form-group input:focus, .form-group select:focus {
-      border-color: #3182ce;
-    }
-    .btn {
-      padding: 9px 18px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-      transition: opacity 0.2s;
-    }
+    .form-group input:focus, .form-group select:focus { border-color: #3182ce; }
+
+    /* Dynamic Custom Shop Input styling */
+    #customPersonGroup { display: none; }
+
+    /* Buttons */
+    .btn { padding: 9px 18px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; transition: opacity 0.2s; }
     .btn:hover { opacity: 0.9; }
     .btn-submit { background: #3182ce; color: white; }
     .btn-sync { background: #2ec4b6; color: white; }
+    .btn-edit {
+      background: #EBF8FF;
+      color: #2B6CB0;
+      border: 1px solid #BEE3F8;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+    .btn-edit:hover { background: #2B6CB0; color: white; }
     .btn-delete {
       background: #FFF5F5;
       color: #E53E3E;
@@ -88,135 +67,92 @@
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
     }
-    .btn-delete:hover {
-      background: #E53E3E;
-      color: white;
-      border-color: #E53E3E;
-    }
+    .btn-delete:hover { background: #E53E3E; color: white; }
 
-    /* Cards */
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 15px;
-      margin-bottom: 25px;
-    }
-    .card {
-      background: #fff;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      border-top: 4px solid #ccc;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
+    /* Summary Cards */
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
+    .card { background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-top: 4px solid #ccc; display: flex; flex-direction: column; gap: 5px; }
     .card.contributions { border-top-color: #2ec4b6; }
     .card.expenses { border-top-color: #e71d36; }
     .card.balance { border-top-color: #3182ce; }
-    .card-title {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #718096;
-      font-weight: 600;
-    }
-    .card-value {
-      font-size: 20px;
-      font-weight: bold;
-      color: #1A202C;
-    }
+    .card-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #718096; font-weight: 600; }
+    .card-value { font-size: 20px; font-weight: bold; color: #1A202C; }
 
     /* Table */
-    .table-container {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-      border: 1px solid #E2E8F0;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 500px;
-    }
-    th {
-      background: #F7FAFC;
-      color: #4A5568;
-      font-weight: 600;
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border-bottom: 2px solid #EDF2F7;
-      cursor: pointer;
-      user-select: none;
-      position: relative;
-      transition: background 0.2s, color 0.2s;
-    }
-    th:hover { background: #EDF2F7; color: #2D3748; }
+    .table-container { overflow-x: auto; background: #fff; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #E2E8F0; }
+    table { width: 100%; border-collapse: collapse; min-width: 500px; }
+    th { background: #F7FAFC; color: #4A5568; font-weight: 600; font-size: 13px; text-transform: uppercase; border-bottom: 2px solid #EDF2F7; cursor: pointer; }
     th, td { padding: 14px 18px; text-align: left; white-space: nowrap; }
-    tbody tr { border-bottom: 1px solid #EDF2F7; transition: background-color 0.15s ease; }
+    tbody tr { border-bottom: 1px solid #EDF2F7; }
     tbody tr:hover { background-color: #F7FAFC; }
-    tbody tr:last-child { border-bottom: none; }
     td { font-size: 14px; color: #4A5568; }
     td.date { color: #2B6CB0; font-weight: 500; }
     td.amount { font-weight: 600; }
 
-    .badge {
-      display: inline-block;
-      padding: 4px 10px;
-      font-size: 11px;
-      font-weight: 600;
-      border-radius: 9999px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+    .badge { display: inline-block; padding: 4px 10px; font-size: 11px; font-weight: 600; border-radius: 9999px; text-transform: uppercase; }
     .badge.contribution { background-color: #E6FFFA; color: #047481; }
     .badge.expense { background-color: #FFF5F5; color: #C53030; }
 
-    .sort-icon { margin-left: 5px; font-size: 10px; color: #4A5568; }
+    tfoot td { font-weight: bold; background: #F7FAFC; font-size: 12px; padding: 10px 18px; color: #718096; border-top: 2px solid #EDF2F7; }
+    td.description { white-space: normal; word-wrap: break-word; max-width: 250px; color: #718096; }
 
-    tfoot td {
-      font-weight: bold;
-      background: #F7FAFC;
-      text-align: left;
-      font-size: 12px;
-      padding: 10px 18px;
-      color: #718096;
-      border-top: 2px solid #EDF2F7;
+    /* Modal Overlay */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
     }
-    td.description {
-      white-space: normal;
-      word-wrap: break-word;
-      max-width: 250px;
-      color: #718096;
+    .modal {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      width: 400px;
+      max-width: 90%;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
   </style>
 </head>
 <body>
 
   <div class="top-bar">
-    <h2>Expense Tracker</h2>
+    <h2>Expense Tracker Editor</h2>
   </div>
 
-  <!-- Entry Form Section (Only useful on Localhost) -->
   <div class="form-container" id="formWrapper">
     <h3>Add New Entry</h3>
     <form id="entryForm" class="form-grid">
       <div class="form-group">
         <label for="formType">Type</label>
         <select id="formType" required>
+          <option value="Expense" selected>Expense</option>
           <option value="Contribution">Contribution</option>
-          <option value="Expense">Expense</option>
         </select>
       </div>
+
+      <!-- Shop Dropdown List -->
       <div class="form-group">
-        <label for="formPerson">Person/Shop</label>
-        <input type="text" id="formPerson" placeholder="Name or Shop" required>
+        <label for="formPersonSelect">Person/Shop</label>
+        <select id="formPersonSelect" required>
+          <option value="Kiwi Kjørbokollen" selected>Kiwi Kjørbokollen</option>
+          <option value="Rema 1000 Vøyenenga">Rema 1000 Vøyenenga</option>
+          <option value="Sandvika Supermarked">Sandvika Supermarked</option>
+          <option value="Meny Sandvika Storsenter">Meny Sandvika Storsenter</option>
+          <option value="__custom__">Other (Type custom)...</option>
+        </select>
       </div>
+
+      <!-- Custom Input (Visible when "Other" is chosen or Contribution is selected) -->
+      <div class="form-group" id="customPersonGroup">
+        <label for="formPersonCustom">Custom Name / Shop</label>
+        <input type="text" id="formPersonCustom" placeholder="Enter name or shop">
+      </div>
+
       <div class="form-group">
         <label for="formAmount">Amount (NOK)</label>
         <input type="number" step="0.01" id="formAmount" placeholder="0.00" required>
@@ -230,32 +166,21 @@
     </form>
   </div>
 
-  <!-- Summary Cards -->
   <div class="summary-grid">
-    <div class="card contributions">
-      <div class="card-title">Total Contributions</div>
-      <div id="top-contrib" class="card-value">—</div>
-    </div>
-    <div class="card expenses">
-      <div class="card-title">Total Expenses</div>
-      <div id="top-exp" class="card-value">—</div>
-    </div>
-    <div class="card balance">
-      <div class="card-title">Current Balance</div>
-      <div id="top-balance" class="card-value">—</div>
-    </div>
+    <div class="card contributions"><div class="card-title">Total Contributions</div><div id="top-contrib" class="card-value">—</div></div>
+    <div class="card expenses"><div class="card-title">Total Expenses</div><div id="top-exp" class="card-value">—</div></div>
+    <div class="card balance"><div class="card-title">Current Balance</div><div id="top-balance" class="card-value">—</div></div>
   </div>
 
-  <!-- Data Table Container -->
   <div class="table-container">
     <table>
       <thead>
         <tr>
-          <th onclick="sortTable(1, 'date')">Date <span id="sort-icon-1" class="sort-icon"></span></th>
-          <th onclick="sortTable(3, 'string')">Type <span id="sort-icon-3" class="sort-icon"></span></th>
-          <th onclick="sortTable(4, 'number')">Amount <span id="sort-icon-4" class="sort-icon"></span></th>
-          <th onclick="sortTable(5, 'number')">Balance <span id="sort-icon-5" class="sort-icon"></span></th>
-          <th onclick="sortTable(2, 'string')">Person/Shop <span id="sort-icon-2" class="sort-icon"></span></th>
+          <th onclick="sortTable(1, 'date')">Date <span id="sort-icon-1"></span></th>
+          <th onclick="sortTable(3, 'string')">Type <span id="sort-icon-3"></span></th>
+          <th onclick="sortTable(4, 'number')">Amount <span id="sort-icon-4"></span></th>
+          <th onclick="sortTable(5, 'number')">Balance <span id="sort-icon-5"></span></th>
+          <th onclick="sortTable(2, 'string')">Person/Shop <span id="sort-icon-2"></span></th>
           <th>Description</th>
           <th id="actionHeader">Action</th>
         </tr>
@@ -269,16 +194,100 @@
     </table>
   </div>
 
+  <!-- Edit Modal -->
+  <div class="modal-overlay" id="editModal">
+    <div class="modal">
+      <h3>Edit Entry</h3>
+      <form id="editForm" style="display: flex; flex-direction: column; gap: 15px;">
+        <input type="hidden" id="editSeq">
+        <div class="form-group">
+          <label>Date (DD-Mon-YY)</label>
+          <input type="text" id="editDate" required>
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <select id="editType" required>
+            <option value="Expense">Expense</option>
+            <option value="Contribution">Contribution</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Person/Shop</label>
+          <input type="text" id="editPerson" required>
+        </div>
+        <div class="form-group">
+          <label>Amount (NOK)</label>
+          <input type="number" step="0.01" id="editAmount" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" id="editDesc">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="closeEditModal()">Cancel</button>
+          <button type="submit" class="btn btn-submit">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
     let globalEntries = [];
     let currentSortColumn = -1;
     let currentSortAscending = true;
     const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-    // Hide input controls when viewing on GitHub Pages (static site mode)
     if (!isLocalhost) {
       document.getElementById('formWrapper').style.display = 'none';
       document.getElementById('actionHeader').style.display = 'none';
+    }
+
+    const typeSelect = document.getElementById('formType');
+    const shopSelect = document.getElementById('formPersonSelect');
+    const customGroup = document.getElementById('customPersonGroup');
+    const customInput = document.getElementById('formPersonCustom');
+
+    // Handle dropdown select change
+    shopSelect.addEventListener('change', () => {
+      if (shopSelect.value === '__custom__') {
+        customGroup.style.display = 'flex';
+        customInput.focus();
+      } else {
+        customGroup.style.display = 'none';
+        customInput.value = '';
+      }
+    });
+
+    // Handle Type change (Clears on Contribution, defaults to Kiwi on Expense)
+    typeSelect.addEventListener('change', (e) => {
+      if (e.target.value === 'Contribution') {
+        shopSelect.value = '__custom__';
+        customGroup.style.display = 'flex';
+        customInput.value = '';
+        customInput.placeholder = 'Name of contributor';
+        customInput.focus();
+      } else {
+        shopSelect.value = 'Kiwi Kjørbokollen';
+        customGroup.style.display = 'none';
+        customInput.value = '';
+        customInput.placeholder = 'Enter name or shop';
+      }
+    });
+
+    function resetFormDefaults() {
+      typeSelect.value = "Expense";
+      shopSelect.value = "Kiwi Kjørbokollen";
+      customGroup.style.display = "none";
+      customInput.value = "";
+      document.getElementById('formAmount').value = "";
+      document.getElementById('formDesc').value = "";
+    }
+
+    function getSelectedPersonValue() {
+      if (shopSelect.value === '__custom__') {
+        return customInput.value.trim();
+      }
+      return shopSelect.value;
     }
 
     function formatNOK(val) {
@@ -290,44 +299,34 @@
       if (!dateStr) return new Date(0);
       const parts = dateStr.split('-');
       if (parts.length !== 3) return new Date(0);
-
       const day = parseInt(parts[0], 10);
       const months = { jan:0, feb:1, mar:2, apr:3, may:4, jun:5, jul:6, aug:7, sep:8, oct:9, nov:10, dec:11 };
       const month = months[parts[1].toLowerCase()] || 0;
-
       let year = parseInt(parts[2], 10);
       if (year < 100) year += 2000;
-
       return new Date(year, month, day);
     }
 
     function formatPrettyDate(dateStr) {
       const dateObj = parseDate(dateStr);
       if (isNaN(dateObj.getTime())) return dateStr;
-
       const day = String(dateObj.getDate()).padStart(2, '0');
       const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-      const year = dateObj.getFullYear();
-
-      return `${day}.${month}.${year}`;
+      return `${day}.${month}.${dateObj.getFullYear()}`;
     }
 
-    // Smart Load Method
     async function loadEntries() {
       try {
         let rawData = [];
-
         if (isLocalhost) {
-          // Fetch from Flask Backend API
           const response = await fetch("/api/entries");
           const json = await response.json();
           rawData = json.map(row => [row.Seq, row.Date, row.Person, row.Type, row.Amount, row.RunningBalance, row.Description]);
         } else {
-          // Fetch directly from static CSV file on GitHub Pages
           const response = await fetch("data.csv");
           const text = await response.text();
           const rows = text.trim().split("\n").map(r => r.split(","));
-          rawData = rows.slice(1); // skip header
+          rawData = rows.slice(1);
         }
 
         let totalContrib = 0, totalExp = 0, balance = 0;
@@ -335,7 +334,6 @@
 
         rawData.forEach(row => {
           if (!row || row.length < 6) return;
-
           const type = (row[3] || "").toLowerCase();
           const amount = parseFloat(row[4]) || 0;
           balance = parseFloat(row[5]) || balance;
@@ -364,7 +362,6 @@
     function renderTable(entries) {
       const tbody = document.getElementById("entries");
       tbody.innerHTML = "";
-
       const renderOrder = [1, 3, 4, 5, 2, 6];
 
       entries.forEach(row => {
@@ -389,27 +386,30 @@
             td.style.color = isExpense ? "#C53030" : "#2F855A";
             td.classList.add("amount");
           } else if (idx === 5) {
-            const balanceVal = parseFloat(cell) || 0;
-            td.textContent = formatNOK(balanceVal);
+            td.textContent = formatNOK(parseFloat(cell) || 0);
             td.style.fontWeight = "600";
           } else {
             td.textContent = cell;
           }
 
-          if (idx === 6) {
-            td.classList.add("description");
-          }
-
+          if (idx === 6) td.classList.add("description");
           tr.appendChild(td);
         });
 
-        // Add Delete Button if running on Localhost
         if (isLocalhost) {
           const actionTd = document.createElement("td");
+
+          const editBtn = document.createElement("button");
+          editBtn.textContent = "Edit";
+          editBtn.className = "btn-edit";
+          editBtn.onclick = () => openEditModal(row);
+
           const deleteBtn = document.createElement("button");
           deleteBtn.textContent = "Delete";
           deleteBtn.className = "btn-delete";
           deleteBtn.onclick = () => deleteEntry(row[0]);
+
+          actionTd.appendChild(editBtn);
           actionTd.appendChild(deleteBtn);
           tr.appendChild(actionTd);
         }
@@ -418,59 +418,75 @@
       });
     }
 
+    function openEditModal(row) {
+      document.getElementById('editSeq').value = row[0];
+      document.getElementById('editDate').value = row[1];
+      document.getElementById('editPerson').value = row[2];
+      document.getElementById('editType').value = row[3];
+      document.getElementById('editAmount').value = row[4];
+      document.getElementById('editDesc').value = row[6] || '';
+      document.getElementById('editModal').style.display = 'flex';
+    }
+
+    function closeEditModal() {
+      document.getElementById('editModal').style.display = 'none';
+    }
+
+    document.getElementById('editForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const seq = document.getElementById('editSeq').value;
+      const payload = {
+        date: document.getElementById('editDate').value,
+        person: document.getElementById('editPerson').value,
+        type: document.getElementById('editType').value,
+        amount: document.getElementById('editAmount').value,
+        description: document.getElementById('editDesc').value
+      };
+
+      try {
+        const response = await fetch(`/api/entries/${seq}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          closeEditModal();
+          loadEntries();
+        } else {
+          alert("Error updating entry.");
+        }
+      } catch (err) {
+        console.error("Update failed:", err);
+      }
+    });
+
     async function deleteEntry(seq) {
       if (!confirm(`Are you sure you want to delete entry #${seq}?`)) return;
-
       try {
         const response = await fetch(`/api/entries/${seq}`, { method: 'DELETE' });
         const result = await response.json();
-
-        if (result.success) {
-          loadEntries();
-        } else {
-          alert("Error: " + result.error);
-        }
+        if (result.success) loadEntries();
+        else alert("Error: " + result.error);
       } catch (err) {
         alert("Failed to send delete request.");
       }
     }
 
     function sortTable(colIndex, type) {
-      if (currentSortColumn === colIndex) {
-        currentSortAscending = !currentSortAscending;
-      } else {
-        currentSortColumn = colIndex;
-        currentSortAscending = true;
-      }
+      if (currentSortColumn === colIndex) currentSortAscending = !currentSortAscending;
+      else { currentSortColumn = colIndex; currentSortAscending = true; }
 
       globalEntries.sort((a, b) => {
         let valA = a[colIndex] ? String(a[colIndex]).trim() : '';
         let valB = b[colIndex] ? String(b[colIndex]).trim() : '';
 
         if (type === 'number') {
-          return currentSortAscending
-            ? (parseFloat(valA) || 0) - (parseFloat(valB) || 0)
-            : (parseFloat(valB) || 0) - (parseFloat(valA) || 0);
+          return currentSortAscending ? (parseFloat(valA) || 0) - (parseFloat(valB) || 0) : (parseFloat(valB) || 0) - (parseFloat(valA) || 0);
         } else if (type === 'date') {
-          const dateA = parseDate(valA);
-          const dateB = parseDate(valB);
-          return currentSortAscending ? dateA - dateB : dateB - dateA;
+          return currentSortAscending ? parseDate(valA) - parseDate(valB) : parseDate(valB) - parseDate(valA);
         } else {
-          return currentSortAscending
-            ? valA.localeCompare(valB)
-            : valB.localeCompare(valA);
-        }
-      });
-
-      const sortableIndexes = [1, 2, 3, 4, 5];
-      sortableIndexes.forEach(i => {
-        const iconSpan = document.getElementById(`sort-icon-${i}`);
-        if (iconSpan) {
-          if (i === colIndex) {
-            iconSpan.textContent = currentSortAscending ? " ▲" : " ▼";
-          } else {
-            iconSpan.textContent = "";
-          }
+          return currentSortAscending ? valA.localeCompare(valB) : valB.localeCompare(valA);
         }
       });
 
@@ -481,9 +497,15 @@
       document.getElementById('entryForm').addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        const personValue = getSelectedPersonValue();
+        if (!personValue) {
+          alert("Please specify a Person or Shop.");
+          return;
+        }
+
         const payload = {
-          type: document.getElementById('formType').value,
-          person: document.getElementById('formPerson').value,
+          type: typeSelect.value,
+          person: personValue,
           amount: document.getElementById('formAmount').value,
           description: document.getElementById('formDesc').value
         };
@@ -494,12 +516,9 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
           });
-
           if (response.ok) {
-            document.getElementById('entryForm').reset();
+            resetFormDefaults();
             loadEntries();
-          } else {
-            alert("Error saving entry.");
           }
         } catch (err) {
           console.error("Submission failed:", err);
@@ -508,16 +527,10 @@
 
       document.getElementById('gitPushBtn').addEventListener('click', async () => {
         if (!confirm("Are you sure you want to push changes to GitHub?")) return;
-
         try {
           const response = await fetch('/api/git-push', { method: 'POST' });
           const result = await response.json();
-
-          if (result.success) {
-            alert("✅ " + result.message);
-          } else {
-            alert("❌ Git Error: " + result.error);
-          }
+          alert(result.success ? "✅ " + result.message : "❌ Git Error: " + result.error);
         } catch (err) {
           alert("Failed to execute push request.");
         }
@@ -535,5 +548,4 @@
   </script>
 </body>
 </html>
-
 

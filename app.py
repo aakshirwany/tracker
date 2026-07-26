@@ -25,6 +25,15 @@ def save_entries_to_csv(entries):
         writer.writeheader()
         writer.writerows(entries)
 
+def recalculate_balances(entries):
+    balance = 0.0
+    for i, e in enumerate(entries, start=1):
+        e["Seq"] = str(i)
+        amt = float(e["Amount"])
+        balance += amt if e["Type"].lower() == "contribution" else -amt
+        e["RunningBalance"] = f"{balance:.2f}"
+    return entries
+
 # -------------------------------------------------------------------
 # Main View & Data Routes
 # -------------------------------------------------------------------
@@ -40,51 +49,75 @@ def get_entries():
 def add_entry():
     data = request.json or {}
     entries = load_entries()
-    
-    entry_type = data.get("type")
-    person = data.get("person")
+
+    entry_type = data.get("type", "Expense").capitalize()
+    person = data.get("person", "")
     try:
         amount = float(data.get("amount"))
     except (ValueError, TypeError):
         return jsonify({"success": False, "error": "Invalid amount"}), 400
-        
+
     description = data.get("description", "").replace(",", " - ").strip()
-    
+
     seq = len(entries) + 1
     date = datetime.date.today().strftime("%d-%b-%y")
-    balance = float(entries[-1]["RunningBalance"]) if entries else 0
-    balance += amount if entry_type.lower() == "contribution" else -amount
 
     new_entry = {
         "Seq": str(seq),
         "Date": date,
         "Person": person,
-        "Type": entry_type.capitalize(),
+        "Type": entry_type,
         "Amount": str(amount),
-        "RunningBalance": str(balance),
+        "RunningBalance": "0",
         "Description": description
     }
-    
+
     entries.append(new_entry)
+    entries = recalculate_balances(entries)
+    save_entries_to_csv(entries)
+    return jsonify({"success": True, "entries": entries})
+
+@app.route('/api/entries/<seq>', methods=['PUT'])
+def update_entry(seq):
+    data = request.json or {}
+    entries = load_entries()
+
+    found = False
+    for e in entries:
+        if e["Seq"] == seq:
+            found = True
+            if "date" in data:
+                e["Date"] = data["date"]
+            if "type" in data:
+                e["Type"] = data["type"].capitalize()
+            if "person" in data:
+                e["Person"] = data["person"]
+            if "amount" in data:
+                try:
+                    e["Amount"] = str(float(data["amount"]))
+                except (ValueError, TypeError):
+                    return jsonify({"success": False, "error": "Invalid amount"}), 400
+            if "description" in data:
+                e["Description"] = data["description"].replace(",", " - ").strip()
+            break
+
+    if not found:
+        return jsonify({"success": False, "error": "Entry not found"}), 404
+
+    entries = recalculate_balances(entries)
     save_entries_to_csv(entries)
     return jsonify({"success": True, "entries": entries})
 
 @app.route('/api/entries/<seq>', methods=['DELETE'])
 def delete_entry(seq):
     entries = load_entries()
-    
+
     new_entries = [e for e in entries if e["Seq"] != seq]
-    
+
     if len(new_entries) == len(entries):
         return jsonify({"success": False, "error": "Entry not found"}), 404
 
-    balance = 0
-    for i, e in enumerate(new_entries, start=1):
-        e["Seq"] = str(i)
-        amt = float(e["Amount"])
-        balance += amt if e["Type"].lower() == "contribution" else -amt
-        e["RunningBalance"] = str(balance)
-
+    new_entries = recalculate_balances(new_entries)
     save_entries_to_csv(new_entries)
     return jsonify({"success": True, "entries": new_entries})
 
