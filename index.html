@@ -228,8 +228,9 @@
       <form id="editForm" style="display: flex; flex-direction: column; gap: 15px;">
         <input type="hidden" id="editSeq">
         <div class="form-group">
-          <label>Date (DD-Mon-YY)</label>
-          <input type="text" id="editDate" required>
+          <label>Date</label>
+          <!-- Updated to native calendar picker -->
+          <input type="date" id="editDate" required>
         </div>
         <div class="form-group">
           <label>Type</label>
@@ -338,6 +339,33 @@
       let year = parseInt(parts[2], 10);
       if (year < 100) year += 2000;
       return new Date(year, month, day);
+    }
+
+    // Convert CSV date format "15-Jul-26" -> HTML Calendar "YYYY-MM-DD"
+    function dateToInputFormat(dateStr) {
+      const dateObj = parseDate(dateStr);
+      if (isNaN(dateObj.getTime())) return "";
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    // Convert HTML Calendar "YYYY-MM-DD" -> CSV date format "15-Jul-26"
+    function inputToCsvDateFormat(yyyyMmDd) {
+      if (!yyyyMmDd) return "";
+      const parts = yyyyMmDd.split('-');
+      if (parts.length !== 3) return yyyyMmDd;
+
+      const year = parseInt(parts[0], 10);
+      const monthIdx = parseInt(parts[1], 10) - 1;
+      const day = parseInt(parts[2], 10);
+
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const monthStr = months[monthIdx] || 'Jan';
+      const yearShort = String(year).slice(-2);
+
+      return `${day}-${monthStr}-${yearShort}`;
     }
 
     function formatPrettyDate(dateStr) {
@@ -484,7 +512,8 @@
 
     function openEditModal(row) {
       document.getElementById('editSeq').value = row[0];
-      document.getElementById('editDate').value = row[1];
+      // Set date picker value formatted as YYYY-MM-DD
+      document.getElementById('editDate').value = dateToInputFormat(row[1]);
       document.getElementById('editPerson').value = row[2];
       document.getElementById('editType').value = row[3];
       document.getElementById('editAmount').value = row[4];
@@ -499,8 +528,10 @@
     document.getElementById('editForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const seq = document.getElementById('editSeq').value;
+      const rawCalendarDate = document.getElementById('editDate').value;
+
       const payload = {
-        date: document.getElementById('editDate').value,
+        date: inputToCsvDateFormat(rawCalendarDate),
         person: document.getElementById('editPerson').value,
         type: document.getElementById('editType').value,
         amount: document.getElementById('editAmount').value,
@@ -613,4 +644,5 @@
   </script>
 </body>
 </html>
+
 
