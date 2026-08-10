@@ -43,3 +43,5 @@ Seq,Date,Person,Type,Amount,RunningBalance,Description
 42,27-Jul-2026,Kiwi Kjørbokollen,Expense,65.0,646.00,Nøttemix -  Peanøtter
 43,07-Aug-26,Sandvika Supermarked,Expense,53.0,593.00,Vannmelon
 44,5-Aug-26,Kiwi Kjørbokollen,Expense,35.0,558.00,Druer
+45,10-Aug-26,Kiwi Kjørbokollen,Expense,35.0,523.00,Druer
+46,8-Aug-26,Kiwi Kjørbokollen,Expense,80.0,443.00,Nøttemix -  Vannmelon -
