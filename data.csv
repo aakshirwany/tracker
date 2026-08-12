@@ -45,3 +45,5 @@ Seq,Date,Person,Type,Amount,RunningBalance,Description
 44,5-Aug-26,Kiwi Kjørbokollen,Expense,35.0,558.00,Druer
 45,10-Aug-26,Kiwi Kjørbokollen,Expense,35.0,523.00,Druer
 46,8-Aug-26,Kiwi Kjørbokollen,Expense,80.0,443.00,Nøttemix -  Vannmelon -
+47,11-Aug-26,Kiwi Kjørbokollen,Expense,71.0,372.00,Klementer -  Vannmelon
+48,12-Aug-26,Kiwi Kjørbokollen,Expense,104.0,268.00,Druer -  Peanøtter -  Nøttermiks
