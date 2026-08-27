@@ -54,5 +54,6 @@ Seq,Date,Person,Type,Amount,RunningBalance,Description
 53,21-Aug-26,Arshad,Contribution,500.0,491.00,
 54,21-Aug-26,Amin,Contribution,500.0,991.00,
 55,21-Aug-26,Akbar,Contribution,500.0,1491.00,
-56,27-Aug-26,Sandvika Supermarked,Expense,41.0,1450.00,Vannmelon
-57,27-Aug-26,Javed,Contribution,500.0,1950.00,
+56,24-Aug-26,Sandvika Supermarked,Expense,41.0,1450.00,Vannmelon
+57,26-Aug-26,Javed,Contribution,500.0,1950.00,
+58,27-Aug-26,Kiwi Kjørbokollen,Expense,109.0,1841.00,Klementer -  Nøttermiks
