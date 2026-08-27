@@ -47,3 +47,12 @@ Seq,Date,Person,Type,Amount,RunningBalance,Description
 46,8-Aug-26,Kiwi Kjørbokollen,Expense,80.0,443.00,Nøttemix -  Vannmelon -
 47,11-Aug-26,Kiwi Kjørbokollen,Expense,71.0,372.00,Klementer -  Vannmelon
 48,12-Aug-26,Kiwi Kjørbokollen,Expense,104.0,268.00,Druer -  Peanøtter -  Nøttermiks
+49,23-Aug-26,Kiwi Kjørbokollen,Expense,107.0,161.00,Druer -  Peanøtter -  Nøttermiks
+50,20-Aug-26,Kiwi Kjørbokollen,Expense,35.0,126.00,Druer
+51,21-Aug-26,Kiwi Kjørbokollen,Expense,35.0,91.00,Druer
+52,22-Aug-26,Kiwi Kjørbokollen,Expense,100.0,-9.00,Druer -  Gigantmais
+53,21-Aug-26,Arshad,Contribution,500.0,491.00,
+54,21-Aug-26,Amin,Contribution,500.0,991.00,
+55,21-Aug-26,Akbar,Contribution,500.0,1491.00,
+56,27-Aug-26,Sandvika Supermarked,Expense,41.0,1450.00,Vannmelon
+57,27-Aug-26,Javed,Contribution,500.0,1950.00,
