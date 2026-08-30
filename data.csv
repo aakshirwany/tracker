@@ -57,3 +57,5 @@ Seq,Date,Person,Type,Amount,RunningBalance,Description
 56,24-Aug-26,Sandvika Supermarked,Expense,41.0,1450.00,Vannmelon
 57,26-Aug-26,Javed,Contribution,500.0,1950.00,
 58,27-Aug-26,Kiwi Kjørbokollen,Expense,109.0,1841.00,Klementer -  Nøttermiks
+59,27-Aug-26,Sandvika Supermarked,Expense,45.0,1796.00,Druer -  Bombay mix
+60,29-Aug-26,Sandvika Supermarked,Expense,52.0,1744.00,Klementer
