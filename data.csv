@@ -59,3 +59,7 @@ Seq,Date,Person,Type,Amount,RunningBalance,Description
 58,27-Aug-26,Kiwi Kjørbokollen,Expense,109.0,1841.00,Klementer -  Nøttermiks
 59,27-Aug-26,Sandvika Supermarked,Expense,45.0,1796.00,Druer -  Bombay mix
 60,29-Aug-26,Sandvika Supermarked,Expense,52.0,1744.00,Klementer
+61,11-Sep-26,Kiwi Kjørbokollen,Expense,66.0,1678.00,Klementer -  Peanøtter
+62,9-Sep-26,Kiwi Kjørbokollen,Expense,116.0,1562.00,Druer -  Peanøtter -  klementer
+63,7-Sep-26,Kiwi Kjørbokollen,Expense,35.0,1527.00,Druer
+64,1-Sep-26,Kiwi Kjørbokollen,Expense,185.0,1342.00,Druer -  Karachi mix -  Vannmelon -  klementer
