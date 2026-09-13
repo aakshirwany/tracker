@@ -1,66 +1,66 @@
 Seq,Date,Person,Type,Amount,RunningBalance,Description
-1,25-Nov-25,Arshad,Contribution,500.0,500.00,
-2,26-Nov-25,Amin,Contribution,500.0,1000.00,
-3,27-Nov-25,Akbar,Contribution,500.0,1500.00,
-4,27-Nov-25,Azeem,Contribution,500.0,2000.00,
-5,01-Dec-25,Rema 1000 Vøyenenga,Expense,70.0,1930.00,Kokostopper -  Klementiner
-6,04-Dec-25,Kiwi Kjørbokollen,Expense,45.0,1885.00,Klementiner - Dadler
-7,07-Dec-25,Rema 1000 Vøyenenga,Expense,18.0,1867.00,Klementiner
-8,08-Dec-25,Europris,Expense,50.0,1817.00,Pappbegger 50-pk
-9,08-Dec-25,Kiwi Kjørbokollen,Expense,40.0,1777.00,Klementiner - Dadler
-10,09-Dec-25,Kiwi Kjørbokollen,Expense,29.0,1748.00,Klementiner
-11,10-Dec-25,Abdul Qayyum,Contribution,500.0,2248.00,
-12,10-Dec-25,Kiwi Kjørbokollen,Expense,46.0,2202.00,Melk - Klementiner
-13,13-Dec-25,Kiwi Kjørbokollen,Expense,28.0,2174.00,Klementiner
-14,14-Dec-25,Asian Shop Sandvika,Expense,22.0,2152.00,Dadler
-15,15-Dec-25,Kiwi Kjørbokollen,Expense,57.0,2095.00,Klementiner - kjeks
-16,17-Dec-25,Kiwi Kjørbokollen,Expense,60.0,2035.00,Klementiner - Dadler
-17,18-Dec-25,Kiwi Kjørbokollen,Expense,42.0,1993.00,Klementiner - Dadler
-18,19-Dec-25,Kiwi Kjørbokollen,Expense,24.0,1969.00,Klementiner
-19,21-Dec-25,Extra Storsenter,Expense,30.0,1939.00,Klementiner
-20,22-Dec-25,Kiwi Kjørbokollen,Expense,44.0,1895.00,Klementiner - Dadler
-21,23-Dec-25,Kiwi Kjørbokollen,Expense,66.0,1829.00,Peanøtter - Klementiner
-22,24-Dec-25,Rema 1000 Vøyenenga,Expense,107.0,1722.00,Kokostopper - Dadler - Klementiner
-23,27-Dec-25,Kiwi Kjørbokollen,Expense,198.0,1524.00,Klementiner - Melk - Peanøtter - Fiken
-24,29-Dec-25,Kiwi Kjørbokollen,Expense,55.0,1469.00,Klementiner
-25,31-Dec-25,Kiwi Kjørbokollen,Expense,18.0,1451.00,Klementiner
-26,05-Jan-26,Kiwi Kjørbokollen,Expense,53.0,1398.00,Appelsin - Peanøtter
-27,06-Jan-26,Kiwi Kjørbokollen,Expense,109.0,1289.00,Appelsin - Chillinøtter - Klementiner
-28,12-Jan-26,Kiwi Kjørbokollen,Expense,85.0,1204.00,Nøtti Frutti
-29,12-Jan-26,Rema 1000 Vøyenenga,Expense,158.0,1046.00,Klementiner - Dadler - Fiken
-30,21-Jan-26,Kiwi Kjørbokollen,Expense,89.0,957.00,Blåbær - Druer
-31,15-Feb-26,Ilyas,Contribution,500.0,1457.00,
-32,10-Jul-26,Kiwi Kjørbokollen,Expense,44.0,1413.00,Klementiner
-33,15-Jul-26,Kiwi Kjørbokollen,Expense,44.0,1369.00,Peanøtter -  Vannmelon
-34,16-Jul-26,Kiwi Kjørbokollen,Expense,82.0,1287.00,Druer - Aprikoser
-35,17-Jul-26,Kiwi Kjørbokollen,Expense,90.0,1197.00,Druer - Blåbær - Peanøtter
-36,19-Jul-26,Sandvika Supermarked,Expense,52.0,1145.00,Dadler - Aprikos - Jordbær
-37,21-Jul-26,Rema 1000 Vøyenenga,Expense,32.0,1113.00,Vannmelon
-38,22-Jul-26,Kiwi Kjørbokollen,Expense,152.0,961.00,Druer -  Peanøtter -  Cashewnøtter - Blåbær
-39,23-Jul-26,Kiwi Kjørbokollen,Expense,134.0,827.00,Nøttemix -  Vannmelon - Melon
-40,02-Aug-26,Sandvika Supermarked,Expense,31.0,796.00,Druer
-41,31-Jul-2026,Kiwi Kjørbokollen,Expense,85.0,711.00,Nøttemix  -  Peanøtter
-42,27-Jul-2026,Kiwi Kjørbokollen,Expense,65.0,646.00,Nøttemix -  Peanøtter
-43,07-Aug-26,Sandvika Supermarked,Expense,53.0,593.00,Vannmelon
-44,5-Aug-26,Kiwi Kjørbokollen,Expense,35.0,558.00,Druer
-45,10-Aug-26,Kiwi Kjørbokollen,Expense,35.0,523.00,Druer
-46,8-Aug-26,Kiwi Kjørbokollen,Expense,80.0,443.00,Nøttemix -  Vannmelon -
-47,11-Aug-26,Kiwi Kjørbokollen,Expense,71.0,372.00,Klementer -  Vannmelon
-48,12-Aug-26,Kiwi Kjørbokollen,Expense,104.0,268.00,Druer -  Peanøtter -  Nøttermiks
-49,23-Aug-26,Kiwi Kjørbokollen,Expense,107.0,161.00,Druer -  Peanøtter -  Nøttermiks
-50,20-Aug-26,Kiwi Kjørbokollen,Expense,35.0,126.00,Druer
-51,21-Aug-26,Kiwi Kjørbokollen,Expense,35.0,91.00,Druer
-52,22-Aug-26,Kiwi Kjørbokollen,Expense,100.0,-9.00,Druer -  Gigantmais
-53,21-Aug-26,Arshad,Contribution,500.0,491.00,
-54,21-Aug-26,Amin,Contribution,500.0,991.00,
-55,21-Aug-26,Akbar,Contribution,500.0,1491.00,
-56,24-Aug-26,Sandvika Supermarked,Expense,41.0,1450.00,Vannmelon
-57,26-Aug-26,Javed,Contribution,500.0,1950.00,
+65,13-Sep-26,Sandvika Supermarked,Expense,171.0,1171.00,Druer -  Karachi mix -  Vannmelon -  aprikos
+64,11-Sep-26,Kiwi Kjørbokollen,Expense,66.0,1342.00,Klementer -  Peanøtter
+63,9-Sep-26,Kiwi Kjørbokollen,Expense,116.0,1408.00,Druer -  Peanøtter -  klementer
+62,7-Sep-26,Kiwi Kjørbokollen,Expense,35.0,1524.00,Druer
+61,1-Sep-26,Kiwi Kjørbokollen,Expense,185.0,1559.00,Druer -  Karachi mix -  Vannmelon -  klementer
+60,29-Aug-26,Sandvika Supermarked,Expense,52.0,1744.00,Klementer
 58,27-Aug-26,Kiwi Kjørbokollen,Expense,109.0,1841.00,Klementer -  Nøttermiks
 59,27-Aug-26,Sandvika Supermarked,Expense,45.0,1796.00,Druer -  Bombay mix
-60,29-Aug-26,Sandvika Supermarked,Expense,52.0,1744.00,Klementer
-61,11-Sep-26,Kiwi Kjørbokollen,Expense,66.0,1678.00,Klementer -  Peanøtter
-62,9-Sep-26,Kiwi Kjørbokollen,Expense,116.0,1562.00,Druer -  Peanøtter -  klementer
-63,7-Sep-26,Kiwi Kjørbokollen,Expense,35.0,1527.00,Druer
-64,1-Sep-26,Kiwi Kjørbokollen,Expense,185.0,1342.00,Druer -  Karachi mix -  Vannmelon -  klementer
-65,13-Sep-26,Sandvika Supermarked,Expense,171.0,1171.00,Druer -  Karachi mix -  Vannmelon -  aprikos
+57,26-Aug-26,Javed,Contribution,500.0,1950.00,
+56,24-Aug-26,Sandvika Supermarked,Expense,41.0,1450.00,Vannmelon
+55,23-Aug-26,Kiwi Kjørbokollen,Expense,107.0,1491.00,Druer -  Peanøtter -  Nøttermiks
+54,22-Aug-26,Kiwi Kjørbokollen,Expense,100.0,1598.00,Druer -  Gigantmais
+50,21-Aug-26,Kiwi Kjørbokollen,Expense,35.0,198.00,Druer
+51,21-Aug-26,Arshad,Contribution,500.0,698.00,
+52,21-Aug-26,Amin,Contribution,500.0,1198.00,
+53,21-Aug-26,Akbar,Contribution,500.0,1698.00,
+49,20-Aug-26,Kiwi Kjørbokollen,Expense,35.0,233.00,Druer
+48,12-Aug-26,Kiwi Kjørbokollen,Expense,104.0,268.00,Druer -  Peanøtter -  Nøttermiks
+47,11-Aug-26,Kiwi Kjørbokollen,Expense,71.0,372.00,Klementer -  Vannmelon
+46,10-Aug-26,Kiwi Kjørbokollen,Expense,35.0,443.00,Druer
+45,8-Aug-26,Kiwi Kjørbokollen,Expense,80.0,478.00,Nøttemix -  Vannmelon -
+44,07-Aug-26,Sandvika Supermarked,Expense,53.0,558.00,Vannmelon
+43,5-Aug-26,Kiwi Kjørbokollen,Expense,35.0,611.00,Druer
+42,02-Aug-26,Sandvika Supermarked,Expense,31.0,646.00,Druer
+41,23-Jul-26,Kiwi Kjørbokollen,Expense,134.0,677.00,Nøttemix -  Vannmelon - Melon
+40,22-Jul-26,Kiwi Kjørbokollen,Expense,152.0,811.00,Druer -  Peanøtter -  Cashewnøtter - Blåbær
+39,21-Jul-26,Rema 1000 Vøyenenga,Expense,32.0,963.00,Vannmelon
+38,19-Jul-26,Sandvika Supermarked,Expense,52.0,995.00,Dadler - Aprikos - Jordbær
+37,17-Jul-26,Kiwi Kjørbokollen,Expense,90.0,1047.00,Druer - Blåbær - Peanøtter
+36,16-Jul-26,Kiwi Kjørbokollen,Expense,82.0,1137.00,Druer - Aprikoser
+35,15-Jul-26,Kiwi Kjørbokollen,Expense,44.0,1219.00,Peanøtter -  Vannmelon
+34,10-Jul-26,Kiwi Kjørbokollen,Expense,44.0,1263.00,Klementiner
+33,15-Feb-26,Ilyas,Contribution,500.0,1307.00,
+32,21-Jan-26,Kiwi Kjørbokollen,Expense,89.0,807.00,Blåbær - Druer
+30,12-Jan-26,Kiwi Kjørbokollen,Expense,85.0,1054.00,Nøtti Frutti
+31,12-Jan-26,Rema 1000 Vøyenenga,Expense,158.0,896.00,Klementiner - Dadler - Fiken
+29,06-Jan-26,Kiwi Kjørbokollen,Expense,109.0,1139.00,Appelsin - Chillinøtter - Klementiner
+28,05-Jan-26,Kiwi Kjørbokollen,Expense,53.0,1248.00,Appelsin - Peanøtter
+27,31-Dec-25,Kiwi Kjørbokollen,Expense,18.0,1301.00,Klementiner
+26,29-Dec-25,Kiwi Kjørbokollen,Expense,55.0,1319.00,Klementiner
+25,27-Dec-25,Kiwi Kjørbokollen,Expense,198.0,1374.00,Klementiner - Melk - Peanøtter - Fiken
+24,24-Dec-25,Rema 1000 Vøyenenga,Expense,107.0,1572.00,Kokostopper - Dadler - Klementiner
+23,23-Dec-25,Kiwi Kjørbokollen,Expense,66.0,1679.00,Peanøtter - Klementiner
+22,22-Dec-25,Kiwi Kjørbokollen,Expense,44.0,1745.00,Klementiner - Dadler
+21,21-Dec-25,Extra Storsenter,Expense,30.0,1789.00,Klementiner
+20,19-Dec-25,Kiwi Kjørbokollen,Expense,24.0,1819.00,Klementiner
+19,18-Dec-25,Kiwi Kjørbokollen,Expense,42.0,1843.00,Klementiner - Dadler
+18,17-Dec-25,Kiwi Kjørbokollen,Expense,60.0,1885.00,Klementiner - Dadler
+17,15-Dec-25,Kiwi Kjørbokollen,Expense,57.0,1945.00,Klementiner - kjeks
+16,14-Dec-25,Asian Shop Sandvika,Expense,22.0,2002.00,Dadler
+15,13-Dec-25,Kiwi Kjørbokollen,Expense,28.0,2024.00,Klementiner
+13,10-Dec-25,Abdul Qayyum,Contribution,500.0,2098.00,
+14,10-Dec-25,Kiwi Kjørbokollen,Expense,46.0,2052.00,Melk - Klementiner
+12,09-Dec-25,Kiwi Kjørbokollen,Expense,29.0,1598.00,Klementiner
+10,08-Dec-25,Europris,Expense,50.0,1667.00,Pappbegger 50-pk
+11,08-Dec-25,Kiwi Kjørbokollen,Expense,40.0,1627.00,Klementiner - Dadler
+9,07-Dec-25,Rema 1000 Vøyenenga,Expense,18.0,1717.00,Klementiner
+8,04-Dec-25,Kiwi Kjørbokollen,Expense,45.0,1735.00,Klementiner - Dadler
+7,01-Dec-25,Rema 1000 Vøyenenga,Expense,70.0,1780.00,Kokostopper -  Klementiner
+5,27-Nov-25,Akbar,Contribution,500.0,1350.00,
+6,27-Nov-25,Azeem,Contribution,500.0,1850.00,
+4,26-Nov-25,Amin,Contribution,500.0,850.00,
+3,25-Nov-25,Arshad,Contribution,500.0,350.00,
+1,31-Jul-2026,Kiwi Kjørbokollen,Expense,85.0,-85.00,Nøttemix  -  Peanøtter
+2,27-Jul-2026,Kiwi Kjørbokollen,Expense,65.0,-150.00,Nøttemix -  Peanøtter
