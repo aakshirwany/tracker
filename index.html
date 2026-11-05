@@ -11,7 +11,7 @@
       background: #f4f6f8;
       color: #2D3748;
     }
-
+    
     .top-bar { margin-bottom: 20px; }
     h2 { margin: 0; color: #1A202C; font-weight: 700; }
 
@@ -37,7 +37,7 @@
       transition: border-color 0.2s;
     }
     .form-group input:focus, .form-group select:focus { border-color: #3182ce; }
-
+    
     /* Dynamic Custom Shop Input styling */
     #customPersonGroup { display: none; }
 
@@ -229,7 +229,6 @@
         <input type="hidden" id="editSeq">
         <div class="form-group">
           <label>Date</label>
-          <!-- Updated to native calendar picker -->
           <input type="date" id="editDate" required>
         </div>
         <div class="form-group">
@@ -263,7 +262,7 @@
     let globalEntries = [];
     let currentSortColumn = -1;
     let currentSortAscending = true;
-
+    
     // Pagination Variables
     let currentPage = 1;
     const pageSize = 15;
@@ -341,7 +340,6 @@
       return new Date(year, month, day);
     }
 
-    // Convert CSV date format "15-Jul-26" -> HTML Calendar "YYYY-MM-DD"
     function dateToInputFormat(dateStr) {
       const dateObj = parseDate(dateStr);
       if (isNaN(dateObj.getTime())) return "";
@@ -351,12 +349,11 @@
       return `${year}-${month}-${day}`;
     }
 
-    // Convert HTML Calendar "YYYY-MM-DD" -> CSV date format "15-Jul-26"
     function inputToCsvDateFormat(yyyyMmDd) {
       if (!yyyyMmDd) return "";
       const parts = yyyyMmDd.split('-');
       if (parts.length !== 3) return yyyyMmDd;
-
+      
       const year = parseInt(parts[0], 10);
       const monthIdx = parseInt(parts[1], 10) - 1;
       const day = parseInt(parts[2], 10);
@@ -397,13 +394,17 @@
           if (!row || row.length < 6) return;
           const type = (row[3] || "").toLowerCase();
           const amount = parseFloat(row[4]) || 0;
-          balance = parseFloat(row[5]) || balance;
 
           if (type === "contribution") totalContrib += amount;
           if (type === "expense") totalExp += amount;
 
           globalEntries.push(row);
         });
+
+        // Current balance is taken directly from the top row (newest entry in CSV)
+        if (rawData.length > 0) {
+          balance = parseFloat(rawData[0][5]) || 0;
+        }
 
         topContrib.textContent = formatNOK(totalContrib);
         topExp.textContent = formatNOK(totalExp);
@@ -413,8 +414,7 @@
         summaryLine2.textContent = `Total Expenses: ${formatNOK(totalExp)}`;
         summaryLine3.textContent = `Current Balance: ${formatNOK(balance)}`;
 
-        globalEntries.reverse();
-        currentPage = 1; // Reset to start
+        currentPage = 1; 
         renderTable();
       } catch (err) {
         console.error("Failed to load entries:", err);
@@ -437,13 +437,13 @@
     function renderTable() {
       const tbody = document.getElementById("entries");
       tbody.innerHTML = "";
-
+      
       const totalEntries = globalEntries.length;
       const totalPages = Math.ceil(totalEntries / pageSize) || 1;
-
+      
       const startIndex = (currentPage - 1) * pageSize;
       const endIndex = Math.min(startIndex + pageSize, totalEntries);
-
+      
       const pageEntries = globalEntries.slice(startIndex, endIndex);
       const renderOrder = [1, 3, 4, 5, 2, 6];
 
@@ -481,12 +481,12 @@
 
         if (isLocalhost) {
           const actionTd = document.createElement("td");
-
+          
           const editBtn = document.createElement("button");
           editBtn.textContent = "Edit";
           editBtn.className = "btn-edit";
           editBtn.onclick = () => openEditModal(row);
-
+          
           const deleteBtn = document.createElement("button");
           deleteBtn.textContent = "Delete";
           deleteBtn.className = "btn-delete";
@@ -504,7 +504,7 @@
       const displayStart = totalEntries > 0 ? startIndex + 1 : 0;
       document.getElementById('pageInfo').textContent = `Showing ${displayStart}-${endIndex} of ${totalEntries} entries`;
       document.getElementById('pageNumber').textContent = `Page ${currentPage} of ${totalPages}`;
-
+      
       document.getElementById('firstBtn').disabled = currentPage === 1;
       document.getElementById('prevBtn').disabled = currentPage === 1;
       document.getElementById('nextBtn').disabled = currentPage === totalPages || totalEntries === 0;
@@ -512,7 +512,6 @@
 
     function openEditModal(row) {
       document.getElementById('editSeq').value = row[0];
-      // Set date picker value formatted as YYYY-MM-DD
       document.getElementById('editDate').value = dateToInputFormat(row[1]);
       document.getElementById('editPerson').value = row[2];
       document.getElementById('editType').value = row[3];
@@ -585,7 +584,7 @@
         }
       });
 
-      currentPage = 1; // Reset to page 1 when sorting
+      currentPage = 1;
       renderTable();
     }
 
@@ -644,5 +643,6 @@
   </script>
 </body>
 </html>
+
 
 
